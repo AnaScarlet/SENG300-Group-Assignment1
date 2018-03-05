@@ -8,6 +8,8 @@ Requirements:
     4. counts the number of references to each occurrence of that type within that directory (non-recursively!).
 
 Output format:
-<type>. Declarations found: <count>; references found: <count>. 
+```
+<type>. Declarations found: <count>; references found: <count>.
+```
 
 Output is a string written to the console
