@@ -14,7 +14,7 @@
  *  Referenced code //https://www.programcreek.com/2011/11/use-jdt-astparser-to-parse-java-file/
  * aa
  */
-package Assign3;
+package temp.src.Assign3;
 
 import java.util.Scanner;
 import java.io.BufferedReader;
@@ -36,7 +36,7 @@ public class Main {
  	
 	public static void parse(String str) {
 						
-		ASTParser parser = ASTParser.newParser(AST.JLS8);
+		ASTParser parser = ASTParser.newParser(AST.JLS9);
 		parser.setSource(str.toCharArray());
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
  

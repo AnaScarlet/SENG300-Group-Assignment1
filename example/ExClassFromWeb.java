@@ -1,3 +1,4 @@
+package example;
 /**
  * @authors			    Anastasiya Lazarenko, Matthew Buhler, Zachary Hull 
  * @team                1
@@ -14,7 +15,7 @@
  *  Referenced code //https://www.programcreek.com/2011/11/use-jdt-astparser-to-parse-java-file/
  * 
  */
-package Assign3;
+
 
 import java.util.Scanner;
 import java.io.BufferedReader;
@@ -32,7 +33,7 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
  
 
-public class Main {
+public class ExClassFromWeb {
  	
 	public static void parse(String str) {
 						
@@ -97,9 +98,10 @@ public class Main {
 		System.out.println("Enter a path: ");
 		String path = reader.next(); 
 		reader.close();
-		File dirs = new File(".");
-		String path2 = dirs.getCanonicalPath() + File.separator+"src/Assign3"+File.separator;
+		//File dirs = new File(".");
+		//String path2 = dirs.getCanonicalPath() + File.separator+"src/Assign3"+File.separator;
 
-		ParseFilesInDir(path2);
+		ParseFilesInDir(path);
+		//ParseFilesInDir("temp/src/Assign3");
 	}
 }
