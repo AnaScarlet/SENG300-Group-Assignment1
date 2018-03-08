@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path=""/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="temp/library/mockito-core-2.15.0.jar"/>
 	<classpathentry kind="lib" path="/home/anastasiya/Downloads/core_13/org.eclipse.core.commands-3.9.0.jar"/>
 	<classpathentry kind="lib" path="/home/anastasiya/Downloads/core_13/org.eclipse.core.contenttype-3.6.0.jar"/>
 	<classpathentry kind="lib" path="/home/anastasiya/Downloads/core_13/org.eclipse.core.expressions-3.6.0.jar"/>
