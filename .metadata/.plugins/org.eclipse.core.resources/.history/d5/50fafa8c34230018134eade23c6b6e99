@@ -1,9 +1,0 @@
-package Test_Directory;
-
-public enum TestEnum {
-	ALERT,
-	QUIET,
-	RESTING,
-	SCARED,
-	PEACEFUL;
-}

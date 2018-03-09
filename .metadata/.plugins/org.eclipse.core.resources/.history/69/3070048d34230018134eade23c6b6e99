@@ -1,9 +1,0 @@
-package Test_Directory;
-
-public class Test_Implimentation_of_Interface implements A_Test_Interface{
-	
-	@SuppressWarnings(value = { })
-	public static void main(String[] args) {
-		System.out.println(TestEnum.PEACEFUL);
-	}
-}

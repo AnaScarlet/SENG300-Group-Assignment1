@@ -1,9 +1,0 @@
-package Test_Directory;
-
-public interface A_Test_Interface {
-	
-	public static void test_Method() {
-		
-	}
-	
-}
