@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.Set;
  
 import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -33,73 +34,19 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
  
 
 public class Main {
- 	
-	public static void parse(String filePath) {
-						
-		ASTParser parser = ASTParser.newParser(AST.JLS9);
-		parser.setSource(filePath.toCharArray());
-		parser.setKind(ASTParser.K_COMPILATION_UNIT);
- 
-		final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
- 
-		cu.accept(new ASTVisitor() {
- 
-			Set names = new HashSet();
-  
-			public boolean visit(VariableDeclarationFragment node) {
-				SimpleName name = node.getName();
-				this.names.add(name.getIdentifier());
-				System.out.println("Declaration of '" + name + "' at line"
-						+ cu.getLineNumber(name.getStartPosition()));
-				return false; // do not continue 
-			}
-			
-		});
- 
-	}
-
-	public static void ParseFilesInDir(String dirPath) throws IOException{
-				
-		// Takes the string path, converts that to an abstract pathname 
-		// then breaks that pathname into each file. 
-		File root = new File(dirPath);			
-		File[] files = root.listFiles( ); 
-		String filePath = "";
-		
-		// Loop through each file
-		 for (File f : files ) {
-			 filePath = f.getAbsolutePath();
-			 if(f.isFile()){
-				 // switch case here?
-				 
-				 parse(readFileToString(filePath));
-			 }
-		 }
-	}
 	
-	//read file content into a string
-	public static String readFileToString(String filePath) throws IOException {
-		StringBuilder fileData = new StringBuilder();
-		BufferedReader reader = new BufferedReader(new FileReader(filePath));
- 
-		char[] buf = new char[10];
-		int numRead = 0;
-		while ((numRead = reader.read(buf)) != -1) {
-			String readData = String.valueOf(buf, 0, numRead);
-			fileData.append(readData);
-			buf = new char[1024];
-		}
- 
-		reader.close();
-		return  fileData.toString();	
-	}
- 	
+	/* TODO: Looking for references to classes
+		String s = (String) new Integer(); - CastExpression, ClassInstanceCreation
+		String.CASE_INSENSITIVE_ORDER;
+		String.class - TypeLiteral
+	 */
 	public static void main(String[] args) throws IOException {
-		String path = "init";
-		String typeDec = "init";
+		String path = "";
+		String typeDec = "";
 		try {
 			path = args[0];
 			typeDec = args[1];
+			
 		} catch (java.lang.ArrayIndexOutOfBoundsException e) {
 			System.err.println("You did not provide enough arguments!");
 			System.out.println("Please try again ");
@@ -112,7 +59,8 @@ public class Main {
 			if (path.equals("") || typeDec.equals(""))
 				System.exit(0);
 		}
-		ParseFilesInDir(path);
+		MyParser parser = new MyParser(path, typeDec);
+		parser.ParseFilesInDir();
 //		Scanner reader = new Scanner(System.in);  
 //		System.out.println("Enter a path: ");
 //		String path = reader.next(); 
