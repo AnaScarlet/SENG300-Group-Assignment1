@@ -1,0 +1,10 @@
+package Test_Directory_Moved;
+
+public interface A_Test_Interface {
+	
+	@SuppressWarnings(value = { })
+	public static void test_Method(int total) {
+		
+	}
+	
+}

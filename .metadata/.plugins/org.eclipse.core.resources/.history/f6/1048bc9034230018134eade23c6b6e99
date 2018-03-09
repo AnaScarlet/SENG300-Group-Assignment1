@@ -1,0 +1,9 @@
+package Test_Directory_Moved;
+
+public enum TestEnum {
+	ALERT,
+	QUIET,
+	RESTING,
+	SCARED,
+	PEACEFUL;
+}

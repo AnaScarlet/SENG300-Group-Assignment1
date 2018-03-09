@@ -1,0 +1,9 @@
+package src.Assign3;
+
+public interface A_Test_Interface {
+	
+	public static void test_Method() {
+		
+	}
+	
+}

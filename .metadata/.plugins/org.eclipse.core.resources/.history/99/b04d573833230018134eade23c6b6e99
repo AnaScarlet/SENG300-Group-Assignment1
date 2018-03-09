@@ -1,0 +1,9 @@
+package src.Assign3;
+
+public enum TestEnum {
+	ALERT,
+	QUIET,
+	RESTING,
+	SCARED,
+	PEACEFUL;
+}
