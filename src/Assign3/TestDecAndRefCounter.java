@@ -16,7 +16,7 @@ import org.junit.Test;
 
 public class TestDecAndRefCounter {
 	
-	private static String BASEDIR = "C:\\GNU-Prolog";
+	private static String BASEDIR = "/home/anastasiya/git/SENG300-Group-Assignment1/src";
 
 ///////////////////////////////////////////////////////////////////// Main Test Cases
 //	
@@ -129,54 +129,60 @@ public class TestDecAndRefCounter {
 	/**
 	 * Tests if the method ParseFilesInDir within MyParser works as
 	 * intended with a valid path and type. No errors. 		
+	 * @throws IOException 
 	 */
 			
 	@Test
-	public void test_ParseFilesInDir_Correct() {
-		MyParser myParser = new MyParser("java.lang.Class",BASEDIR);
+	public void test_ParseFilesInDir_Correct() throws IOException {
+		MyParser myParser = new MyParser(BASEDIR, "java.lang.Class");
 		myParser.ParseFilesInDir();
 	}
 	
 	/**
 	 * Tests if the method ParseFilesInDir within MyParser generates 
 	 * an error with an invalid path name
+	 * @throws IOException 
 	 */
 			
-	@Test (expected = IOException)
-	public void test_ParseFilesInDir_Invalid_Path() {
-		MyParser myParser = new MyParser("java.lang.Class", " ");
+	@Test (expected = IOException.class)
+	public void test_ParseFilesInDir_Invalid_Path() throws IOException {
+		MyParser myParser = new MyParser("lejjfbklas", "java.lang.Class");
 		myParser.ParseFilesInDir();
-	}
+	} 
 	
 	/**
 	 * Tests if the method ParseFilesInDir within MyParser throws
 	 * an exception when both arguments are invalid.
+	 * @throws IOException
 	 */
 			
-	@Test (expected = IOException)
-	public void test_ParseFilesInDir_Invalid_Path_and_Type() {
-		MyParser myParser = new MyParser(" ", " ");
+	@Test (expected = IOException.class)
+	public void test_ParseFilesInDir_Invalid_Path_and_Type() throws IOException {
+		MyParser myParser = new MyParser("aslfjnkfba", "kahdbfka");
 		myParser.ParseFilesInDir();
-	}
-	
+	} 
+	 
 	/**
 	 * Tests if the method readFilesToString within MyParser works
 	 * as intended with a valid path and type.
+	 * @throws IOException 
 	 */
 			
 	@Test
-	public void test_readFileToString_Valid_Path() {
-		MyParser myParser = new MyParser("java.lang.Class", BASEDIR);
-		myParser.readFileToString(myParser.dirPath);
-	}
+	public void test_readFileToString_Valid_Path() throws IOException {
+		MyParser myParser;
+		myParser = new MyParser(BASEDIR, "java.lang.Class");
+		myParser.readFileToString(myParser.dirPath + "Numbers.java");
+	}  
 	
 	/**
 	 * Tests if the method readFilesToString within MyParser works
-	 * as intended with a valid path and type.
+	 * as intended with a valid and type.
+	 * @throws IOException 
 	 */
 			
-	@Test (expected = IOException)
-	public void test_readFileToString_Invalid_Path() {
+	@Test (expected = IOException.class)
+	public void test_readFileToString_Invalid_Path() throws IOException {
 		MyParser myParser = new MyParser("java.lang.Class", BASEDIR);
 		myParser.readFileToString(myParser.dirPath);
 	}

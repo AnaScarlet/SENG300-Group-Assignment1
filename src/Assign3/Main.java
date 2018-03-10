@@ -67,5 +67,5 @@ public class Main {
 			System.out.println("An exception occurred while parsing the given directory.");
 		}
 		// TODO: get counts of references and of declarations from parser and return them to user
-	}
+	} 
 }

@@ -13,11 +13,15 @@ public class MyParser {
 
 
 	private String typeDec = "init";
-	private String dirPath = "init";
+	String dirPath = "init";
 	
 	public MyParser(String path, String typeDec) {
 		this.typeDec = typeDec;
-		this.dirPath = new File("src/Assign3").getAbsolutePath();
+		try {
+		this.dirPath = path;
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		} 
 	}
  	
 	public void parse(String filePath) {
@@ -37,7 +41,10 @@ public class MyParser {
 				
 		// Takes the string path, converts that to an abstract pathname 
 		// then breaks that pathname into each file. 
-		File root = new File(dirPath);			
+		File root = new File(dirPath);	
+		if (!root.isDirectory())
+			throw new IOException();
+		
 		File[] files = root.listFiles( ); 
 		String filePath = "";
 		
@@ -48,7 +55,8 @@ public class MyParser {
 				 // switch case here?
 				 
 				 parse(readFileToString(filePath));
-			 }
+			 } else
+				 throw new IOException();
 		 }
 	}
 	
