@@ -40,7 +40,7 @@ public class Main {
 		String.CASE_INSENSITIVE_ORDER;
 		String.class - TypeLiteral
 	 */
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws InvalidArgumentsException{
 		String path = "";
 		String typeDec = "";
 		try {
@@ -48,7 +48,7 @@ public class Main {
 			typeDec = args[1];
 			
 		} catch (java.lang.ArrayIndexOutOfBoundsException e) {
-			System.err.println("You did not provide enough arguments!");
+			System.out.println("You did not provide enough arguments!");
 			System.out.println("Please try again ");
 			Scanner reader = new Scanner(System.in);  
 			System.out.println("Enter a path: ");
@@ -56,18 +56,16 @@ public class Main {
 			System.out.println("Enter a Java type declaration: ");
 			typeDec = reader.next(); 
 			reader.close();
-			if (path.equals("") || typeDec.equals(""))
+			if (typeDec.equals(""))
+				throw new InvalidArgumentsException();
 				System.exit(0);
 		}
 		MyParser parser = new MyParser(path, typeDec);
-		parser.ParseFilesInDir();
-//		Scanner reader = new Scanner(System.in);  
-//		System.out.println("Enter a path: ");
-//		String path = reader.next(); 
-//		reader.close();
-//		File dirs = new File(".");
-//		String path2 = dirs.getCanonicalPath() + File.separator+"src/Assign3"+File.separator;
-//
-//		ParseFilesInDir(path2);
+		try {
+			parser.ParseFilesInDir();
+		} catch (IOException e) {
+			System.out.println("An exception occurred while parsing the given directory.");
+		}
+		// TODO: get counts of references and of declarations from parser and return them to user
 	}
 }
