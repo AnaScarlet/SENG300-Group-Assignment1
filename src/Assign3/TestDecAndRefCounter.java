@@ -9,9 +9,16 @@
 package src.Assign3;
 
 import static org.junit.Assert.*;
+
+import java.io.IOException;
+
 import org.junit.Test;
 
 public class TestDecAndRefCounter {
+	
+	private static String BASEDIR = "C:\\GNU-Prolog";
+
+///////////////////////////////////////////////////////////////////// Main Test Cases
 //	
 //    /**
 //     * Checks if the program will compute the correct number of
@@ -116,5 +123,62 @@ public class TestDecAndRefCounter {
 //    	int total = new Main("path name", "java.lang.Annotation");
 //    	assertEquals( 0, total);
 //    }
+			
+///////////////////////////////////////////////////////////////////// MyParser Test cases
+			
+	/**
+	 * Tests if the method ParseFilesInDir within MyParser works as
+	 * intended with a valid path and type. No errors. 		
+	 */
+			
+	@Test
+	public void test_ParseFilesInDir_Correct() {
+		MyParser myParser = new MyParser("java.lang.Class",BASEDIR);
+		myParser.ParseFilesInDir();
+	}
+	
+	/**
+	 * Tests if the method ParseFilesInDir within MyParser generates 
+	 * an error with an invalid path name
+	 */
+			
+	@Test (expected = IOException)
+	public void test_ParseFilesInDir_Invalid_Path() {
+		MyParser myParser = new MyParser("java.lang.Class", " ");
+		myParser.ParseFilesInDir();
+	}
+	
+	/**
+	 * Tests if the method ParseFilesInDir within MyParser throws
+	 * an exception when both arguments are invalid.
+	 */
+			
+	@Test (expected = IOException)
+	public void test_ParseFilesInDir_Invalid_Path_and_Type() {
+		MyParser myParser = new MyParser(" ", " ");
+		myParser.ParseFilesInDir();
+	}
+	
+	/**
+	 * Tests if the method readFilesToString within MyParser works
+	 * as intended with a valid path and type.
+	 */
+			
+	@Test
+	public void test_readFileToString_Valid_Path() {
+		MyParser myParser = new MyParser("java.lang.Class", BASEDIR);
+		myParser.readFileToString(myParser.dirPath);
+	}
+	
+	/**
+	 * Tests if the method readFilesToString within MyParser works
+	 * as intended with a valid path and type.
+	 */
+			
+	@Test (expected = IOException)
+	public void test_readFileToString_Invalid_Path() {
+		MyParser myParser = new MyParser("java.lang.Class", BASEDIR);
+		myParser.readFileToString(myParser.dirPath);
+	}
 }
 
