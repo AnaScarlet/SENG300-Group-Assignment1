@@ -1,9 +1,14 @@
-	/**
-	 *  @authors			    Anastasiya Lazarenko, Matthew Buhler, Zachary Hull 
-	 */
-
-
-
+/**
+ * @authors			    Anastasiya Lazarenko, Matthew Buhler, Zachary Hull
+ * @team                1
+ * @version             Group Assignment 1
+ * @since               March 14th, 2018
+ *
+ * Course:              SENG300, University of Calgary
+ * Instructor:          Prof. Robert Walker
+ * 
+ * This is the JUnit test suit designed to test the Main and MyParser classes as of now.
+ */
 
 
 package src.Assign3;
