@@ -32,9 +32,15 @@ public class VisitClassDec extends ASTVisitor {
 	public boolean visit(TypeDeclaration node) {
 		if (node.isInterface())
 			System.out.println("Visited an Interface Decaration");		//This type also finds interface declarations
-		else {															//so we must ignore them.
+		else {				
+			//so we must ignore them.
+			//System.out.println(node.getName().toString() == "VisitAnnotDec");
+						
+			
+			if(node.getName().toString().equals("VisitAnnotDec")){  
 			System.out.println("Visited a Class Decaration");			//When a class node is found print a message
-			num ++;														//and increment the total.
+			num ++;								
+			}//and increment the total.
 		}
 		return false; 			// skip children of this node
 	}
