@@ -1,4 +1,4 @@
-package TestDirWithoutAllTypes;
+package test.TestDirWithoutAllTypes;
 
 public class SecondTestClass {
 

@@ -79,8 +79,8 @@ public class Main {
 		} catch (IOException e) {												//reading files.
 			System.out.println("An exception occurred while parsing the given directory.");
 		}																		//Print an exception if there was a problem reading.
-    //System.out.println("For your selection of " + typeDec +":");
-    System.out.println("Number of References: " + parser.getReferences());		//Get and print the number of references and
-    System.out.println("Number of Declarations: " + parser.getDeclarations());	//declarations of the given type in the given
-	}																			//directory.
+
+		System.out.println(typeDec + ". Declarations found: " + parser.getDeclarations() + 
+			"; References found: " + parser.getReferences() + ".");		//Get and print the number of references and declarations in directory
+	}																			
 }

@@ -28,7 +28,7 @@ public class MyParser {
 
 
 	private String typeDec = "init";
-	private String dirPath = "init";
+	public String dirPath = "init";
 	private int	declarations = 0;
 	private int	references = 0;
 
@@ -64,25 +64,26 @@ public class MyParser {
 
 	/**
 	 * Creates an AST using the given string and determines which type was given.
-	 * It then calls the methods which search and count the number of declarations and
+	 * It then calls the methods which searches and counts the number of declarations and
 	 * references of that type within the AST.
 	 * 
 	 * @param filePath		A given string to convert into an AST.
 	 */
 	public void parse(String filePath) {
 
-		ASTParser parser = ASTParser.newParser(AST.JLS8);					//Creating the AST with the given string.
+		ASTParser parser = ASTParser.newParser(AST.JLS9);					//Creating the AST with the given string.
 		parser.setSource(filePath.toCharArray());
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		parser.setResolveBindings(true);
 
 
 		final ASTNode node =  parser.createAST(null);						//AST node to be used to search through.
 
-
+		//System.out.println(filePath);
+		
 		switch (typeDec) {
 
-			case "class":								//If type is class call these searching methods.
-
+			case "class":	 							//If type is class call these searching methods.
 				classDeclarations(node);
 				classReferences(node);
 				break;
@@ -100,7 +101,8 @@ public class MyParser {
 				break;
 
 			case "annotation":							//If type is annotation call these searching methods.
-
+				annotationDeclarations(node);
+				annotationReferences(node);
 				break;
 		}
 	}
@@ -204,9 +206,13 @@ public class MyParser {
 	 * 
 	 * @param node		The final AST created to be searched.
 	 */
-	@Deprecated
+	
 	public void annotationReferences(ASTNode node){
-
+		VisitMarkerAnnotRef a1 = new VisitMarkerAnnotRef ();							//Create an instance of this class
+		VisitNormalAnnotRef a2 = new VisitNormalAnnotRef ();
+		node.accept(a1);													//and use it to search for declarations of annotations.
+		node.accept(a2);	
+		references = a1.getNum() + a2.getNum();
 	}
 
 	
@@ -219,7 +225,7 @@ public class MyParser {
 	 */
 	
 	public void annotationDeclarations(ASTNode node){
-		VisitAnnotDec a = new VisitAnnotDec ();							//Create an instance of this class
+		VisitAnnotDec a = new VisitAnnotDec();							//Create an instance of this class
 		node.accept(a);													//and use it to search for declarations of annotations.
 		declarations = a.getNum();										//Set the number of declarations found.
 	}
@@ -237,9 +243,10 @@ public class MyParser {
 	public void ParseFilesInDir() throws IOException{
 		
 		File root = new File(dirPath);									// Takes the string path, converts that to an abstract pathname
+		if (!root.isDirectory())
+			throw new IOException();
 		File[] files = root.listFiles( );								// then breaks that pathname into each file.
 		String filePath = "";
-
 		
 		 for (File f : files ) {										// Loop through each file
 			 filePath = f.getAbsolutePath();
@@ -247,7 +254,8 @@ public class MyParser {
 				 					// switch case here?
 
 				 parse(readFileToString(filePath));						//Parse with the string of the file read
-			 }
+			 } else
+				 throw new IOException();
 		 }
 	}
 

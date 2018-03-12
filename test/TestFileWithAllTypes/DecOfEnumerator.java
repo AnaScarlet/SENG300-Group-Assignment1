@@ -1,4 +1,4 @@
-package TestFileWithAllTypes;
+package test.TestFileWithAllTypes;
 
 public enum DecOfEnumerator {
 	HAPPY,

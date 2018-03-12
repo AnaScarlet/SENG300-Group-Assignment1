@@ -7,37 +7,34 @@
  * Course:              SENG300, University of Calgary
  * Instructor:          Prof. Robert Walker
  * 
- * This class uses the ASTVisitor to search for nodes of java language type TypeDeclaration (Interface)
+ * This class uses the ASTVisitor to search for nodes of java language type AnnotationTypeDeclaration
  * and counts the total number of declarations found.
  */
 
 package src.Assign3;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.NormalAnnotation;
 
-public class VisitInterfDec extends ASTVisitor {
+public class VisitNormalAnnotRef extends ASTVisitor {
 	
-	private static int num = 0;										//The total number of declarations found.
-
+	private static int num = 0;											//The total number of declarations found
+	
 	
 	/**
 	 * This function searches through he AST given and counts the total number of declarations found
-	 * of type enumeration.
+	 * of type annotation.
 	 * 
 	 * @param node		The AST to search though.
 	 * @return			False, to skip the nodes children.
 	 */
 	
-	public boolean visit(TypeDeclaration node) {
-		if (node.isInterface()) {
-			num ++;													//When a class node is found print a message
-			System.out.println("Visited an Interface Decaration");	//and increment the total.
-		} else														//This type also finds class declarations
-			System.out.println("Visited a Class Decaration");		//so we must ignore them.
-		return false; 						// skip children of this node
+	public boolean visit(NormalAnnotation node) {
+		System.out.println("Visited a AnnotationTypeDeclaration");		//When finding a node of this type, print
+		num ++;															//this message and increment the total.
+		return false;				 // skip children of this node
 	}
-	
+
 	
 	/**
 	 * Getter for the total number of declarations found.
@@ -48,5 +45,4 @@ public class VisitInterfDec extends ASTVisitor {
 	public int getNum() {
 		return num;
 	}
-	
 }
