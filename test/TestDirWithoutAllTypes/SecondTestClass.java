@@ -10,5 +10,7 @@ public class SecondTestClass {
 	@SuppressWarnings(value = { })
 	public static void a_Test_Dir2() {
 		SecondTestClass myTester = new SecondTestClass();
+		String myString = "Hello World.";
+		int bFlat = 100;
 	}
 }
