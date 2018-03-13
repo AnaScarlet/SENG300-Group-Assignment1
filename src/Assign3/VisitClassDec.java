@@ -18,6 +18,12 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 public class VisitClassDec extends ASTVisitor {
 	
+	String QualName = "";
+	
+	public VisitClassDec(String QualName) {
+		this.QualName = QualName;
+	}
+	
 	private static int num = 0;											//Total number of declarations found.
 	
 	
@@ -36,8 +42,7 @@ public class VisitClassDec extends ASTVisitor {
 			//so we must ignore them.
 			//System.out.println(node.getName().toString() == "VisitAnnotDec");
 						
-			
-			if(node.getName().toString().equals("VisitAnnotDec")){  
+			if(node.getName().toString().equals(QualName)){  
 			System.out.println("Visited a Class Decaration");			//When a class node is found print a message
 			num ++;								
 			}//and increment the total.

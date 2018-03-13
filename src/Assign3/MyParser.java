@@ -19,26 +19,30 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Map;
 
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.ITypeBinding;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.internal.compiler.ASTVisitor;
 
 public class MyParser {
 
 
 	private String typeDec = "init";
-	public String dirPath = "init";
+	private String dirPath = "init";
 	private int	declarations = 0;
 	private int	references = 0;
 
 
-
 	public MyParser(String path, String typeDec) {
-		this.typeDec = typeDec.toLowerCase();					//Constructor used to take the directory path
+		this.typeDec = typeDec;					//Constructor used to take the directory path
 		this.dirPath = path;									//and the language type.
 	}
-
 
 	/**
 	 * Number of declarations getter.
@@ -71,21 +75,26 @@ public class MyParser {
 	 */
 	public void parse(String filePath) {
 
-		ASTParser parser = ASTParser.newParser(AST.JLS9);					//Creating the AST with the given string.
+		ASTParser parser = ASTParser.newParser(AST.JLS8);					//Creating the AST with the given string.
 		parser.setSource(filePath.toCharArray());
-		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setResolveBindings(true);
-
-
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		parser.setBindingsRecovery(false);
+		
 		final ASTNode node =  parser.createAST(null);						//AST node to be used to search through.
-
-		//System.out.println(filePath);
+	    
+		classDeclarations(node);
+		//classReferences(node);
+		//allReferences(node);
+		//annotationDeclarations(node);
+		annotationReferences(node);
 		
 		switch (typeDec) {
 
 			case "class":	 							//If type is class call these searching methods.
 				classDeclarations(node);
 				classReferences(node);
+				
 				break;
 
 			case "enum":								//If type is enumeration call these searching methods.
@@ -117,13 +126,13 @@ public class MyParser {
 	 */
 	
 	public void classDeclarations(ASTNode node){
-		VisitClassDec a = new VisitClassDec();								//Create an instance of this class and use it
+		VisitClassDec a = new VisitClassDec(typeDec);								//Create an instance of this class and use it
 		node.accept(a);														//To search for declarations of classes.
 		declarations = a.getNum();											//Set the number of declarations found.
 
 	}
 
-	
+		
 	/**
 	 * This method is called to use VisitClassInstCreation to search for class 
 	 * type references and change the number found in this class 
@@ -138,6 +147,22 @@ public class MyParser {
 		references = a.getNum();											//Set the number of references found.
 	}
 
+	/**
+	 * This method is called to use VisitClassInstCreation to search for class 
+	 * type references and change the number found in this class 
+	 * to the number found in a.
+	 * 
+	 * @param node		The final AST created to be searched.
+	 */
+	
+	public void allReferences(ASTNode node){
+		VisitReferences a = new VisitReferences(typeDec);				//Create an instance of this class and use it
+		node.accept(a);														//to search for references of classes. 
+		references = a.getNum();											//Set the number of references found.
+	}
+
+
+	
 	
 	/**
 	 * This method is called to use VisitInterfDec to search for interface 
@@ -252,7 +277,7 @@ public class MyParser {
 			 filePath = f.getAbsolutePath();
 			 if(f.isFile()){
 				 					// switch case here?
-
+				 System.out.println(filePath);
 				 parse(readFileToString(filePath));						//Parse with the string of the file read
 			 } else
 				 throw new IOException();
