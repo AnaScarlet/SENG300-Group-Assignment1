@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Map;
-
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -40,7 +39,7 @@ public class MyParser {
 
 
 	public MyParser(String path, String typeDec) {
-		this.typeDec = typeDec;									//Constructor used to take the directory path
+		this.typeDec = typeDec;					//Constructor used to take the directory path
 		this.dirPath = path;									//and the language type.
 	}
 
@@ -75,190 +74,50 @@ public class MyParser {
 	 */
 	public void parse(String filePath) {
 
-		ASTParser parser = ASTParser.newParser(AST.JLS8);				//Creating the AST with the given string.
+		ASTParser parser = ASTParser.newParser(AST.JLS8);					//Creating the AST with the given string.
 		parser.setSource(filePath.toCharArray());
 		parser.setResolveBindings(true);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setBindingsRecovery(false);
 		
-		final ASTNode node =  parser.createAST(null);					//AST node to be used to search through.
+		final ASTNode node =  parser.createAST(null);						//AST node to be used to search through.
 	    
-		classDeclarations(node);
-		//classReferences(node);
-		//allReferences(node);
-		//annotationDeclarations(node);
-		annotationReferences(node);
-		
-//		VisitAbstractTypeDec a = new VisitAbstractTypeDec();
-//		node.accept(a);
-//		declarations = a.getNum();
-//		
-//		VisitClassInstCreation ax = new VisitClassInstCreation();		//Create an instance of this class and use it
-//		node.accept(ax);			
-//		VisitMarkerAnnotRef a1 = new VisitMarkerAnnotRef ();							//Create an instance of this class
-//		VisitNormalAnnotRef a2 = new VisitNormalAnnotRef ();
-//		node.accept(a1);												//and use it to search for declarations of annotations.
-//		node.accept(a2);	//to search for references of classes. 
-//		references = ax.getNum() + a1.getNum() + a2.getNum();	
-//		
-		switch (typeDec) {
-
-			case "class":	 							//If type is class call these searching methods.
-				classDeclarations(node);
-				classReferences(node);
+		allDeclarations(node);
+		allReferences(node);
 				
-				break;
-
-			case "enum":								//If type is enumeration call these searching methods.
-				enumDeclarations(node);
-				enumReferences(node);
-
-				break;
-
-			case "interface":							//If type is interface call these searching methods.
-				interfaceDeclarations(node);
-				interfaceReferences(node);
-
-				break;
-
-			case "annotation":							//If type is annotation call these searching methods.
-				annotationDeclarations(node);
-				annotationReferences(node);
-				break;
-		}
 	}
-
 	
 	/**
-	 * This method is called to use VisitClassDec to search for class 
-	 * type declarations and change the number found in this class 
-	 * to the number found in a.
-	 * 
-	 * @param node		The final AST created to be searched.
-	 */
-	public void classDeclarations(ASTNode node){
-		VisitClassDec a = new VisitClassDec(typeDec);					//Create an instance of this class and use it
-		node.accept(a);													//To search for declarations of classes.
-		declarations = a.getNum();										//Set the number of declarations found.
-	}
-
-		
-	/**
-	 * This method is called to use VisitClassInstCreation to search for class 
+	 * This method is called to use VisitReferences to search for class 
 	 * type references and change the number found in this class 
 	 * to the number found in a.
 	 * 
 	 * @param node		The final AST created to be searched.
 	 */
-	public void classReferences(ASTNode node){
-		VisitClassInstCreation a = new VisitClassInstCreation();		//Create an instance of this class and use it
-		node.accept(a);													//to search for references of classes. 
-		references = a.getNum();										//Set the number of references found.
-	}
-
 	
-	/**
-	 * This method is called to use VisitClassInstCreation to search for class 
-	 * type references and change the number found in this class 
-	 * to the number found in a.
-	 * 
-	 * @param node		The final AST created to be searched.
-	 */
 	public void allReferences(ASTNode node){
 		VisitReferences a = new VisitReferences(typeDec);				//Create an instance of this class and use it
-		node.accept(a);													//to search for references of classes. 
-		references = a.getNum();										//Set the number of references found.
+		node.accept(a);														//to search for references of classes. 
+		references = a.getNum() + references;										//Set the number of references found.
 	}
 
-
+		
 	/**
-	 * This method is called to use VisitInterfDec to search for interface 
+	 * This method is called to use VisitDeclarations to search for class 
 	 * type declarations and change the number found in this class 
 	 * to the number found in a.
 	 * 
 	 * @param node		The final AST created to be searched.
 	 */
-	public void interfaceDeclarations(ASTNode node){
-		VisitInterfDec a = new VisitInterfDec ();						//Create an instance of this class and use it
-		node.accept(a);													//to search for declarations of interfaces.
-		declarations = a.getNum();										//Set the number of declarations found.
-	}
-
 	
-	/**
-	 * This method is called to use VisitEnumDec to search for Enumeration 
-	 * type references and change the number found in this class 
-	 * to the number found in a.
-	 * 
-	 * @param node		The final AST created to be searched.
-	 */
-	public void interfaceReferences(ASTNode node){
-		//todo add interface references
+	public void allDeclarations(ASTNode node){
+		VisitDeclarations a = new VisitDeclarations(typeDec);								//Create an instance of this class and use it
+		node.accept(a);														//To search for declarations of classes.
+		declarations = a.getNum() + declarations;											//Set the number of declarations found.
 
-		//VisitClassDec a = new VisitClassDec();
-		//node.accept(a);
-		//references = a.getNumInterface();
 	}
 
-	
-	/**
-	 * This method is called to use ************** to search for Enumeration 
-	 * type references and change the number found in this class 
-	 * to the number found in a.
-	 * 
-	 * @param node		The final AST created to be searched.
-	 */
-	public void enumReferences(ASTNode node){
-		//todo add enum references/ update javadoc with method name
-	}
-
-	
-	/**
-	 * This method is called to use VisitEnumDec to search for Enumeration 
-	 * type declarations and change the number found in this class 
-	 * to the number found in a.
-	 * 
-	 * @param node		The final AST created to be searched.
-	 */
-	public void enumDeclarations(ASTNode node){
-		VisitEnumDec a = new VisitEnumDec ();							//Create an instance of this class and use it to
-		VisitEnumConstDec a1 = new VisitEnumConstDec();
-		node.accept(a);													//search for declarations of enumerations.
-		node.accept(a1);
-		System.out.println(a.getNum() + ", " + a1.getNum());
-		declarations = a.getNum() + a1.getNum();						//Set the number of declarations found.
-	}
-
-
-	/**
-	 * This method would be used if we find out there are annotation references.
-	 * As of now We do not believe that is possible so it is not being used.
-	 * 
-	 * @param node		The final AST created to be searched.
-	 */
-	public void annotationReferences(ASTNode node){
-		VisitMarkerAnnotRef a1 = new VisitMarkerAnnotRef ();							//Create an instance of this class
-		VisitNormalAnnotRef a2 = new VisitNormalAnnotRef ();
-		node.accept(a1);												//and use it to search for declarations of annotations.
-		node.accept(a2);	
-		references = a1.getNum() + a2.getNum();
-	}
-
-	
-	/**
-	 * This method is called to use VisitAnnotDec to search for annotation 
-	 * type declarations and change the number found in this class 
-	 * to the number found in a.
-	 * 
-	 * @param node		The final AST created to be searched.
-	 */
-	public void annotationDeclarations(ASTNode node){
-		VisitAnnotDec a = new VisitAnnotDec();							//Create an instance of this class
-		node.accept(a);													//and use it to search for declarations of annotations.
-		declarations = a.getNum();										//Set the number of declarations found.
-	}
-
-
+			
 	/**
 	 * This class uses the dirPath variable to get the absolute path for the
 	 * directory loops through all files in the directory calling readFileToString
@@ -267,6 +126,7 @@ public class MyParser {
 	 * 
 	 * @throws IOException
 	 */
+
 	public void ParseFilesInDir() throws IOException{
 		
 		File root = new File(dirPath);									// Takes the string path, converts that to an abstract pathname
@@ -278,6 +138,7 @@ public class MyParser {
 		 for (File f : files ) {										// Loop through each file
 			 filePath = f.getAbsolutePath();
 			 if(f.isFile()){
+				 					// switch case here?
 				 System.out.println(filePath);
 				 parse(readFileToString(filePath));						//Parse with the string of the file read
 			 } else
@@ -293,19 +154,21 @@ public class MyParser {
 	 * @return 				The string format of the file.
 	 * @throws IOException	
 	 */
+	
 	public String readFileToString(String filePath) throws IOException {
 
-		StringBuilder fileData = new StringBuilder();					//Opening the file to read it
+		StringBuilder fileData = new StringBuilder();							//Opening the file to read it
 		BufferedReader reader = new BufferedReader(new FileReader(filePath));
 
 		char[] buf = new char[10];
 		int numRead = 0;
-		while ((numRead = reader.read(buf)) != -1) {					//Loop through the file appending 
-			String readData = String.valueOf(buf, 0, numRead);			//the lines read to a total
+		while ((numRead = reader.read(buf)) != -1) {							//Loop through the file appending 
+			String readData = String.valueOf(buf, 0, numRead);					//the lines read to a total
 			fileData.append(readData);
 			buf = new char[1024];
 		}
-		reader.close();													//Closing the file
-		return  fileData.toString();									//returning what was read as a string
+
+		reader.close();															//Closing the file
+		return  fileData.toString();											//returning what was read as a string
 	}
 }
