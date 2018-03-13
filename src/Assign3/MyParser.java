@@ -89,6 +89,18 @@ public class MyParser {
 		//annotationDeclarations(node);
 		annotationReferences(node);
 		
+//		VisitAbstractTypeDec a = new VisitAbstractTypeDec();
+//		node.accept(a);
+//		declarations = a.getNum();
+//		
+//		VisitClassInstCreation ax = new VisitClassInstCreation();			//Create an instance of this class and use it
+//		node.accept(ax);			
+//		VisitMarkerAnnotRef a1 = new VisitMarkerAnnotRef ();							//Create an instance of this class
+//		VisitNormalAnnotRef a2 = new VisitNormalAnnotRef ();
+//		node.accept(a1);													//and use it to search for declarations of annotations.
+//		node.accept(a2);	//to search for references of classes. 
+//		references = ax.getNum() + a1.getNum() + a2.getNum();	
+//		
 		switch (typeDec) {
 
 			case "class":	 							//If type is class call these searching methods.
@@ -223,7 +235,9 @@ public class MyParser {
 		VisitEnumConstDec a1 = new VisitEnumConstDec();
 		node.accept(a);													//search for declarations of enumerations.
 		node.accept(a1);
-		declarations = a.getNum() + a1.getNum();										//Set the number of declarations found.
+		System.out.println(a.getNum() + ", " + a1.getNum());
+		declarations = a.getNum() + a1.getNum();								//Set the number of declarations found.
+
 	}
 
 

@@ -202,7 +202,7 @@ public class TestDecAndRefCounter {
 	@Test
 	public void testMyParserParseYesClassDeclaration() {
 		MyParser myParser = new MyParser(BASEDIR, "java.lang.class");
-		myParser.parse("public class ATestClass{}");
+		myParser.parse("public class ATestClass { public String mystring;}");
 		assertEquals(1, myParser.getDeclarations());
 	}
 	
@@ -251,14 +251,21 @@ public class TestDecAndRefCounter {
 	@Test
 	public void testMyParserParseYesAnnotationReference() {
 		MyParser myParser = new MyParser("", "java.lang.annotation");
-		myParser.parse("public class ATestClass{@Test}");
-		assertEquals(1, myParser.getDeclarations());
+		myParser.parse("public class ATestClass{@Override public void myfunc() {}}");
+		assertEquals(1, myParser.getReferences());
+	}
+	
+	@Test
+	public void testMyParserParseYesNormalAnnotationReference() {
+		MyParser myParser = new MyParser("", "java.lang.annotation");
+		myParser.parse("public class ATestClass{@Test (expected = IOException.class) public void myfunc() {}}");
+		assertEquals(1, myParser.getReferences());
 	}
 	
 	@Test
 	public void testVisitClasDecYesDec() {
 		ASTParser parser = ASTParser.newParser(AST.JLS9);					
-		parser.setSource("class MyClass{}".toCharArray());
+		parser.setSource("public class MyClass{}".toCharArray());
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		ASTNode node =  parser.createAST(null);	
 		VisitClassDec a = new VisitClassDec();								

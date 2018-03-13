@@ -11,4 +11,6 @@ public interface DecOfInterface {
 	public static void test_Method2() {
 		
 	}
+	
+	public void here();
 }

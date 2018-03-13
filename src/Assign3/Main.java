@@ -83,7 +83,7 @@ public class Main {
 		System.out.println(typeDec + ". Declarations found: " + parser.getDeclarations() + 
 			"; References found: " + parser.getReferences() + ".");		//Get and print the number of references and declarations in directory
 	}			
-	
+
 	/**
 	 * takes a full java type name and chops off everything but the type name 
 	 * eg: java.lang.String to String
