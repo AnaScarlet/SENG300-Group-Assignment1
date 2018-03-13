@@ -1,3 +1,16 @@
+/**
+ * @authors			    Anastasiya Lazarenko, Matthew Buhler, Zachary Hull
+ * @team                1
+ * @version             Group Assignment 1
+ * @since               March 14th, 2018
+ *
+ * Course:              SENG300, University of Calgary
+ * Instructor:          Prof. Robert Walker
+ * 
+ * This class uses the ASTVisitor to search for nodes of java language type AnnotationTypeDeclaration
+ * and counts the total number of declarations found.
+ */
+
 package src.Assign3;
 
 import org.eclipse.jdt.core.dom.*;

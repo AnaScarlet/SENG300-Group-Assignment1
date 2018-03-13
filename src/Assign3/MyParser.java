@@ -88,7 +88,7 @@ public class MyParser {
 	}
 	
 	/**
-	 * This method is called to use VisitReferences to search for class 
+	 * This method is called to use VisitReferences to search for all 
 	 * type references and change the number found in this class 
 	 * to the number found in a.
 	 * 
@@ -103,7 +103,7 @@ public class MyParser {
 
 		
 	/**
-	 * This method is called to use VisitDeclarations to search for class 
+	 * This method is called to use VisitDeclarations to search for all 
 	 * type declarations and change the number found in this class 
 	 * to the number found in a.
 	 * 
