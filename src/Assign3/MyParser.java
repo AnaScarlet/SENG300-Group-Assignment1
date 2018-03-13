@@ -34,7 +34,7 @@ public class MyParser {
 
 
 	private String typeDec = "init";
-	private String dirPath = "init";
+	public String dirPath = "init";
 	private int	declarations = 0;
 	private int	references = 0;
 
@@ -220,8 +220,10 @@ public class MyParser {
 	
 	public void enumDeclarations(ASTNode node){
 		VisitEnumDec a = new VisitEnumDec ();							//Create an instance of this class and use it to
+		VisitEnumConstDec a1 = new VisitEnumConstDec();
 		node.accept(a);													//search for declarations of enumerations.
-		declarations = a.getNum();										//Set the number of declarations found.
+		node.accept(a1);
+		declarations = a.getNum() + a1.getNum();										//Set the number of declarations found.
 	}
 
 

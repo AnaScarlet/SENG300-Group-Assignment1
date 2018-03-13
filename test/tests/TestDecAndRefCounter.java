@@ -22,6 +22,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.junit.Test;
 
+import src.Assign3.Main;
 import src.Assign3.MyParser;
 import src.Assign3.VisitClassDec;
 
@@ -275,6 +276,16 @@ public class TestDecAndRefCounter {
 		node.accept(a);														
 		assertEquals(0, a.getNum());
 	} 
+	
+	@Test
+	public void testMainGetTypeName() {
+		assertEquals("String", Main.getTypeName("java.lang.String"));
+	}
+	
+	@Test
+	public void testMainGetTypeNameNoDot() {
+		assertEquals("Str", Main.getTypeName("Str"));
+	}
 	
 }
 

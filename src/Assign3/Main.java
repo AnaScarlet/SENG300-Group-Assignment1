@@ -73,7 +73,7 @@ public class Main {
 				throw new InvalidArgumentsException();							//an exception and exit the program.
 				System.exit(0);
 		}
-		MyParser parser = new MyParser(path, typeDec);							//Create a new parser instance with
+		MyParser parser = new MyParser(path, getTypeName(typeDec));							//Create a new parser instance with
 		try {																	//the given arguments.
 			parser.ParseFilesInDir();											//Call the ParseFilesInDir method start
 		} catch (IOException e) {												//reading files.
@@ -82,5 +82,28 @@ public class Main {
 
 		System.out.println(typeDec + ". Declarations found: " + parser.getDeclarations() + 
 			"; References found: " + parser.getReferences() + ".");		//Get and print the number of references and declarations in directory
-	}																			
+	}			
+	
+	/**
+	 * takes a full java type name and chops off everything but the type name 
+	 * eg: java.lang.String to String
+	 * @param fullTypeName
+	 * @return typeName
+	 */
+	public static String getTypeName(String fullTypeName) {
+		int len = fullTypeName.length();
+		StringBuilder sb = new StringBuilder(fullTypeName);
+		int lastIndx = sb.lastIndexOf(".", len);
+		
+		char[] fullTypeNameChar = fullTypeName.toCharArray();
+		String typeName = "";
+		
+		for (int i=0; i<len; i++) {
+			if (i > lastIndx) {
+				typeName += fullTypeNameChar[i];
+			}
+		}
+		return typeName;
+	}
+	
 }
