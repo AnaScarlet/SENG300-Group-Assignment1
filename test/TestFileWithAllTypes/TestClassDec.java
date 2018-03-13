@@ -9,4 +9,10 @@ public class TestClassDec implements DecOfInterface{
 		private static void a_Test_Method() {
 			
 		}
+
+		@Override
+		public void here() {
+			// TODO Auto-generated method stub
+			
+		}
 }

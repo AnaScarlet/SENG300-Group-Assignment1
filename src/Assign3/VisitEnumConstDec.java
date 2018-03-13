@@ -17,7 +17,7 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
 
-public class VisitEnumDec extends ASTVisitor {
+public class VisitEnumConstDec extends ASTVisitor {
 	
 	private static int num = 0;									//The total number of declarations found.
 
@@ -30,8 +30,8 @@ public class VisitEnumDec extends ASTVisitor {
 	 * @return			False, to skip the nodes children.
 	 */
 	
-	public boolean visit(EnumDeclaration node) {
-		System.out.println("Visited an EnumDeclaration");		//When a class node is found print a message
+	public boolean visit(EnumConstantDeclaration node) {
+		System.out.println("Visited an EnumConstantDeclaration");		//When a class node is found print a message
 		num ++;													//and increment the total.
 		return false; 					// skip children of this node
 	}
