@@ -39,7 +39,7 @@ public class TestDecAndRefCounter {
 //     */
 //    @Test
 //    public void test_class_declaration() {
-//    	int total = new Main("path name", "java.lang.Class");
+//    	int total = new Main(BASEDIR, "java.lang.Class");
 //    	assertEquals(expected, total);
 //    }
 //    
@@ -50,7 +50,7 @@ public class TestDecAndRefCounter {
 //     */
 //    @Test
 //    public void test_Enum_declaration() {
-//    	int total = new Main("path name", "java.lang.Enumerator");
+//    	int total = new Main(BASEDIR, "java.lang.Enumerator");
 //    	assertEquals(expected, total);
 //    }
 //    
@@ -61,7 +61,7 @@ public class TestDecAndRefCounter {
 //     */
 //    @Test
 //    public void test_Interface_Declaration() {
-//    	int total = new Main("path name", "java.lang.Interface");
+//    	int total = new Main(BASEDIR, "java.lang.Interface");
 //    	assertEquals(expected, total);
 //    }
 //    
@@ -72,15 +72,26 @@ public class TestDecAndRefCounter {
 //     */
 //    @Test
 //    public void test_Annotation_Declaration() {
-//    	int total = new Main("path name", "java.lang.Annotation");
+//    	int total = new Main(BASEDIR, "java.lang.Annotation");
 //    	assertEquals(expected, total);
+//    }
+//	
+//    /**
+//     * Checks if the program will compute the correct number of
+//     * declarations and references using "String" as the type
+//     * to search for.
+//     */
+//    @Test
+//    public void test_Annotation_Declaration() {
+//        int total = new Main(BASEDIR, "java.lang.String");
+//  	  assertEquals(expected, total);
 //    }
 //    
 //    /**
 //     * Checks if the program will throw InvalidArgumentException
 //     * for an invalid path but a valid declaration type
 //     */
-//    @Test(expected = IllegalArgumentException.class)
+//    @Test(expected = InvalidArgumentsException.class)
 //    public void test_Invalid_Path_Valid_Dec() {
 //    	int total = new Main("path name", "java.lang.Class");
 //    }
@@ -103,7 +114,7 @@ public class TestDecAndRefCounter {
 //    	int total = new Main("path name", "java.lang.Class");
 //    }
 //    
-//	/**
+//	  /**
 //     * Checks if the program will return 0 when the directory has
 //     * no declarations or references of "Enumerator" as the type
 //     * to search for.
@@ -140,46 +151,49 @@ public class TestDecAndRefCounter {
 			
 	/**
 	 * Tests if the method ParseFilesInDir within MyParser works as
-	 * intended with a valid path and type. No errors. 		
+	 * intended with a valid path and type. No errors. 	
+	 * 	
 	 * @throws IOException 
-	 */
-			
+	 */	
 	@Test
 	public void test_ParseFilesInDir_Correct() throws IOException {
 		MyParser myParser = new MyParser(BASEDIR, "java.lang.Class");
 		myParser.ParseFilesInDir();
 	}
 	
+	
 	/**
 	 * Tests if the method ParseFilesInDir within MyParser generates 
-	 * an error with an invalid path name
+	 * an error with an invalid path name.
+	 * 
 	 * @throws IOException 
-	 */
-			
+	 */	
 	@Test (expected = IOException.class)
 	public void test_ParseFilesInDir_Invalid_Path() throws IOException {
 		MyParser myParser = new MyParser("lejjfbklas", "java.lang.Class");
 		myParser.ParseFilesInDir();
 	} 
 	
+	
 	/**
 	 * Tests if the method ParseFilesInDir within MyParser throws
 	 * an exception when both arguments are invalid.
+	 * 
 	 * @throws IOException
-	 */
-			
+	 */	
 	@Test (expected = IOException.class)
 	public void test_ParseFilesInDir_Invalid_Path_and_Type() throws IOException {
 		MyParser myParser = new MyParser("aslfjnkfba", "kahdbfka");
 		myParser.ParseFilesInDir();
 	} 
 	 
+	
 	/**
 	 * Tests if the method readFilesToString within MyParser works
 	 * as intended with a valid path and type.
+	 * 
 	 * @throws IOException 
-	 */
-			
+	 */	
 	@Test
 	public void test_readFileToString_Valid_Path() throws IOException {
 		MyParser myParser;
@@ -187,83 +201,124 @@ public class TestDecAndRefCounter {
 		myParser.readFileToString(myParser.dirPath + "/ATestClass.java");
 	}  
 	
+	
 	/**
 	 * Tests if the method readFilesToString within MyParser works
 	 * as intended with a valid and type.
+	 * 
 	 * @throws IOException 
-	 */
-			
+	 */	
 	@Test (expected = IOException.class)
 	public void test_readFileToString_Invalid_Path() throws IOException {
 		MyParser myParser = new MyParser(BASEDIR, "java.lang.Class");
 		myParser.readFileToString(myParser.dirPath);
 	}
 	
+	/**
+	 * This test checks to see if MyParser parse correctly computes 1 declaration to
+	 * a class when a string is given with 1 class declared.
+	 */
 	@Test
-	public void testMyParserParseYesClassDeclaration() {
+	public void test_MyParser_Parse_With_ClassDeclaration() {
 		MyParser myParser = new MyParser(BASEDIR, "java.lang.class");
 		myParser.parse("public class ATestClass { public String mystring;}");
 		assertEquals(1, myParser.getDeclarations());
 	}
 	
+	/**
+	 * This test checks to see if MyParser parse correctly computes 0 declarations to
+	 * a class when a string is given without any classes declared.
+	 */
 	@Test
-	public void testMyParserParseNoClassDeclaration() {
+	public void test_MyParser_Parse_Without_ClassDeclaration() {
 		MyParser myParser = new MyParser("", "java.lang.class");
 		myParser.parse("ATest{}");
 		assertEquals(0, myParser.getDeclarations());
 	}
 	
+	/**
+	 * This test checks to see if MyParser parse correctly computes 0 declarations to
+	 * an enumeration when a string is given without any enumerations declared.
+	 */
 	@Test
-	public void testMyParserParseNoInterfaceDeclaration() {
+	public void test_MyParser_Parse_Without_InterfaceDeclaration() {
 		MyParser myParser = new MyParser("", "java.lang.interface");
 		myParser.parse("public class ATestClass{}");
 		assertEquals(0, myParser.getDeclarations());
 	}
 	
+	/**
+	 * This test checks to see if MyParser parse correctly computes 1 declaration to
+	 * an interface when a string is given with 1 interface declared.
+	 */
 	@Test
-	public void testMyParserParseYesInterfaceDeclaration() {
+	public void test_MyParser_Parse_With_InterfaceDeclaration() {
 		MyParser myParser = new MyParser("", "java.lang.interface");
 		myParser.parse("public interface ATestInterface{}");
 		assertEquals(1, myParser.getDeclarations());
 	}
 	
+	/**
+	 * This test checks to see if MyParser parse correctly computes 1 declaration to
+	 * an enumeration when a string is given with 1 enumeration declared.
+	 */
 	@Test
-	public void testMyParserParseNoEnumDeclaration() {
+	public void test_MyParser_Parse_Without_EnumDeclaration() {
 		MyParser myParser = new MyParser("", "java.lang.enum");
 		myParser.parse("public class ATestClass{}");
 		assertEquals(0, myParser.getDeclarations());
 	}
 	
+	/**
+	 * This test checks to see if MyParser parse correctly computes 1 declaration to
+	 * an enumeration when a string is given with 1 enumeration declared.
+	 */
 	@Test
-	public void testMyParserParseYesEnumDeclaration() {
+	public void test_MyParser_Parse_With_EnumDeclaration() {
 		MyParser myParser = new MyParser("", "java.lang.enum");
 		myParser.parse("public enum ATestEnum{A,B}");
 		assertEquals(1, myParser.getDeclarations());
 	}
 	
+	/**
+	 * This test checks to see if MyParser parse correctly computes 0 references to
+	 * an annotation when a string is given without any annotation references.
+	 */
 	@Test
-	public void testMyParserParseNoAnnotationReference() {
+	public void test_MyParser_Parse_Without_AnnotationReference() {
 		MyParser myParser = new MyParser("", "java.lang.annotation");
 		myParser.parse("public class ATestClass{}");
 		assertEquals(0, myParser.getDeclarations());
 	}
 	
+	/**
+	 * This test checks to see if MyParser parse correctly computes 1 reference to
+	 * an annotation when a string is given with 1 annotation reference.
+	 */
 	@Test
-	public void testMyParserParseYesAnnotationReference() {
+	public void test_MyParser_Parse_With_AnnotationReference() {
 		MyParser myParser = new MyParser("", "java.lang.annotation");
 		myParser.parse("public class ATestClass{@Override public void myfunc() {}}");
 		assertEquals(1, myParser.getReferences());
 	}
 	
+	/**
+	 * This test checks to see if MyParser parse correctly computes 1 reference to
+	 * a normal annotation when a string is given with 1 normal annotation reference.
+	 */
 	@Test
-	public void testMyParserParseYesNormalAnnotationReference() {
+	public void test_MyParser_Parse_With_Normal_AnnotationReference() {
 		MyParser myParser = new MyParser("", "java.lang.annotation");
 		myParser.parse("public class ATestClass{@Test (expected = IOException.class) public void myfunc() {}}");
 		assertEquals(1, myParser.getReferences());
 	}
 	
+	/**
+	 * This test creates an AST with 1 class declaration and checks to see if VisitClassDec 
+	 * correctly computes 1 declaration.
+	 */
 	@Test
-	public void testVisitClasDecYesDec() {
+	public void test_VisitClasDec_With_A_Declaration() {
 		ASTParser parser = ASTParser.newParser(AST.JLS9);					
 		parser.setSource("public class MyClass{}".toCharArray());
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
@@ -273,8 +328,12 @@ public class TestDecAndRefCounter {
 		assertEquals(1, a.getNum());
 	} 
 	
+	/**
+	 * This test creates an empty AST and checks to see if VisitClassDec
+	 * can correctly compute 0 declarations of class. 
+	 */
 	@Test
-	public void testVisitClasDecNoDec() {
+	public void test_VisitClasDec_Without_A_Declaration() {
 		ASTParser parser = ASTParser.newParser(AST.JLS9);					
 		parser.setSource(" ".toCharArray());
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
@@ -284,13 +343,21 @@ public class TestDecAndRefCounter {
 		assertEquals(0, a.getNum());
 	} 
 	
+	/**
+	 * This test attempts to use the getTypeName method in main to see if it returns
+	 * the correct output with a qualified name given.
+	 */
 	@Test
-	public void testMainGetTypeName() {
+	public void test_Main_GetTypeName() {
 		assertEquals("String", Main.getTypeName("java.lang.String"));
 	}
 	
+	/**
+	 * This test attempts to use the getTypeName method in main to see if it returns
+	 * the correct output without a qualified name given.
+	 */
 	@Test
-	public void testMainGetTypeNameNoDot() {
+	public void test_Main_GetTypeName_NoDot() {
 		assertEquals("Str", Main.getTypeName("Str"));
 	}
 	

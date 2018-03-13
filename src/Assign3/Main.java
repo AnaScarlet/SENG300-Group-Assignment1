@@ -14,6 +14,7 @@
  *  Referenced code //https://www.programcreek.com/2011/11/use-jdt-astparser-to-parse-java-file/
  * aa
  */
+
 package src.Assign3;
 
 import java.util.Scanner;
@@ -50,60 +51,62 @@ public class Main {
 	 * Finally the method gets and prints the number of references and declarations of the given type.
 	 * 
 	 * @param args		A list of args containing the path name first then the java.lang. type.
+	 * @return 
 	 * @throws InvalidArgumentsException
 	 */
-	
-	public static void main(String[] args) throws InvalidArgumentsException{
+	public static int main(String[] args) throws InvalidArgumentsException{
 		String path = "";
 		String typeDec = "";
 		try {
-			path = args[0];														//The two given arguments.
+			path = args[0];													//The two given arguments.
 			typeDec = args[1];
 
-		} catch (java.lang.ArrayIndexOutOfBoundsException e) {					//If less than two arguments given
-			System.out.println("You did not provide enough arguments!");		//an error is caught and corresponding
-			System.out.println("Please try again ");							//messages printed to try again.
+		} catch (java.lang.ArrayIndexOutOfBoundsException e) {				//If less than two arguments given
+			System.out.println("You did not provide enough arguments!");	//an error is caught and corresponding
+			System.out.println("Please try again ");						//messages printed to try again.
 			Scanner reader = new Scanner(System.in);
-			System.out.println("Enter a path: ");								//Second attempt at providing the 
-			path = reader.next();												//arguments.
+			System.out.println("Enter a path: ");							//Second attempt at providing the 
+			path = reader.next();											//arguments.
 			System.out.println("Enter a Java type declaration: ");
 			typeDec = reader.next();
 			reader.close();	
-			if (typeDec.equals(""))												//If type is an empty string throw
-				throw new InvalidArgumentsException();							//an exception and exit the program.
+			if (typeDec.equals(""))											//If type is an empty string throw
+				throw new InvalidArgumentsException();						//an exception and exit the program.
 				System.exit(0);
 		}
-		MyParser parser = new MyParser(path, getTypeName(typeDec));							//Create a new parser instance with
-		try {																	//the given arguments.
-			parser.ParseFilesInDir();											//Call the ParseFilesInDir method start
-		} catch (IOException e) {												//reading files.
+		MyParser parser = new MyParser(path, getTypeName(typeDec));			//Create a new parser instance with
+		try {																//the given arguments.
+			parser.ParseFilesInDir();										//Call the ParseFilesInDir method start
+		} catch (IOException e) {											//reading files.
 			System.out.println("An exception occurred while parsing the given directory.");
-		}																		//Print an exception if there was a problem reading.
+		}																	//Print an exception if there was a problem reading.
 
 		System.out.println(typeDec + ". Declarations found: " + parser.getDeclarations() + 
-			"; References found: " + parser.getReferences() + ".");		//Get and print the number of references and declarations in directory
-	}			
+			"; References found: " + parser.getReferences() + ".");			//Get and print the number of references and
+		return parser.getDeclarations() + parser.getReferences();			//declarations in directory and return the sum
+	}																		//of both.
 
+	
 	/**
 	 * takes a full java type name and chops off everything but the type name 
 	 * eg: java.lang.String to String
-	 * @param fullTypeName
-	 * @return typeName
+	 * 
+	 * @param fullTypeName	The qualified name.
+	 * @return typeName		The simple name.
 	 */
 	public static String getTypeName(String fullTypeName) {
-		int len = fullTypeName.length();
-		StringBuilder sb = new StringBuilder(fullTypeName);
-		int lastIndx = sb.lastIndexOf(".", len);
+		int len = fullTypeName.length();									//Get the length of the qualified name.
+		StringBuilder sb = new StringBuilder(fullTypeName);					//Create a string builder and find the last
+		int lastIndx = sb.lastIndexOf(".", len);							//index of ".".
 		
 		char[] fullTypeNameChar = fullTypeName.toCharArray();
 		String typeName = "";
 		
 		for (int i=0; i<len; i++) {
-			if (i > lastIndx) {
-				typeName += fullTypeNameChar[i];
-			}
+			if (i > lastIndx) {												//Count each character of the word and add 
+				typeName += fullTypeNameChar[i];							//all the characters after the last period
+			}																//to a new String.
 		}
 		return typeName;
 	}
-	
 }

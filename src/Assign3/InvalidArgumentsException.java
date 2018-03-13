@@ -23,7 +23,6 @@ public class InvalidArgumentsException extends Exception {
 	 * Sends an error message to the parent class when an invalid
 	 * argument exception has been found
 	 */
-	
 	public InvalidArgumentsException() {
 		super("You did not provide enough arguments.");			//String argument to be sent to parents method
 	}
