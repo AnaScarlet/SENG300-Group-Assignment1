@@ -26,11 +26,7 @@ public class VisitReferences extends ASTVisitor  {
 	 */
 	
 	public boolean visit(SimpleType node) {
-		
-		
-		System.out.println(node.getName());
 		if(node.getName().toString().equals(QualName)) {
-			System.out.println(QualName);
 			num ++;	
 			return true;
 		}
@@ -64,38 +60,23 @@ public class VisitReferences extends ASTVisitor  {
 	 */
 	
 	public boolean visit(NormalAnnotation node) {
-		if(node.getTypeName().toString().equals(QualName)) {//When finding a node of this type, print
-			
-		//System.out.println("Visited a AnnotationTypeDeclaration");		//When finding a node of this type, print
-		num ++;
+		if(node.getTypeName().toString().equals(QualName)) {
+			num ++;						// increment total
 			return true;
-		}	//this message and increment the total.
-		return true;				 // skip children of this node
+		}	
+		return true;				 // don't skip children of this node
 	}
 
-
-	
-	//this might mess up alongside Marker Annotations bindings don't seem to work. 
-	public boolean visit(AbstractTypeDeclaration node) {
-
-		if((node.getName().getFullyQualifiedName()).equals(QualName)){
-			num ++;
-			return true;
-		}
-		return true;	// go to children of this node
-	}
-	
 	
 	//TODO need to fix with resolve bindings.
 	public boolean visit(TypeParameter node) {
-		//System.out.println("2" + node.getName());
+		System.out.println("TypeParameter: " + node.getName());
 		if((node.getName().getFullyQualifiedName()).equals(QualName)){
 			num ++;
 			return true;
 		}
 		return true;	// go to children of this node
 	}
-	
 	
 	
 	/**

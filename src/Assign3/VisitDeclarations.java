@@ -16,6 +16,7 @@ package src.Assign3;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
 import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
+import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 public class VisitDeclarations extends ASTVisitor {
@@ -38,7 +39,6 @@ public class VisitDeclarations extends ASTVisitor {
 	 */
 	
 	public boolean visit(TypeDeclaration node) {
-			
 		if(node.getName().toString().equals(QualName)){  
 			num ++;								
 			return true;
@@ -46,10 +46,9 @@ public class VisitDeclarations extends ASTVisitor {
 		return true; 			// goto children of this node
 	}
 	
-
-	
 	
 	public boolean visit(AnnotationTypeDeclaration node) {
+		System.out.println("have an AnnotationTypeDeclaration: " + node.getName());
 		if(node.getName().toString().equals(QualName)){  
 			num ++;															//this message and increment the total.
 			return true;
@@ -58,12 +57,22 @@ public class VisitDeclarations extends ASTVisitor {
 	}
 
 	public boolean visit(EnumConstantDeclaration node) {
-		if(node.getName().toString().equals(QualName)){ 		//When a class node is found print a message
-		num ++;													//and increment the total.
-		return true;  // skip children of this node
+		System.out.println("have an EnumConstantDeclaration: " + node.getName());
+		if(node.getName().toString().equals(QualName)){ 	
+			num ++;													// increment the total.
+			return true;  // go to children of this node
 		}
-	return true;
-}
+		return true;
+	}
+	
+	public boolean visit(EnumDeclaration node) {
+		System.out.println("have an EnumDeclaration: " + node.getName());
+		if(node.getName().toString().equals(QualName)){ 	
+			num ++;													//increment the total.
+			return true;  // go to children of this node
+		}
+		return true;
+	}
 	
 	
 	/**

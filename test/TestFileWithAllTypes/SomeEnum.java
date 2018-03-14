@@ -11,5 +11,8 @@ public class SomeEnum {
 		   public int getValue() {
 		      return value;
 		   }
-		}
+	}
+	enum X{} 
+	
+	MyEnum x = MyEnum.ONE;
 }

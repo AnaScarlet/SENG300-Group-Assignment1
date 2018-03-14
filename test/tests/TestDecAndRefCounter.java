@@ -22,9 +22,11 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.junit.Test;
 
+import src.Assign3.InvalidArgumentsException;
 import src.Assign3.Main;
 import src.Assign3.MyParser;
-import src.Assign3.VisitClassDec;
+import src.Assign3.VisitDeclarations;
+import src.Assign3.VisitReferences;
 
 public class TestDecAndRefCounter {
 	
@@ -86,15 +88,8 @@ public class TestDecAndRefCounter {
 //        int total = new Main(BASEDIR, "java.lang.String");
 //  	  assertEquals(expected, total);
 //    }
-//    
-//    /**
-//     * Checks if the program will throw InvalidArgumentException
-//     * for an invalid path but a valid declaration type
-//     */
-//    @Test(expected = InvalidArgumentsException.class)
-//    public void test_Invalid_Path_Valid_Dec() {
-//    	int total = new Main("path name", "java.lang.Class");
-//    }
+    
+
 //    
 //    /**
 //     * Checks if the program will throw InvalidArgumentException 
@@ -146,9 +141,32 @@ public class TestDecAndRefCounter {
 //    	int total = new Main("path name", "java.lang.Annotation");
 //    	assertEquals( 0, total);
 //    }
-			
+//			
 ///////////////////////////////////////////////////////////////////// MyParser Test cases
-			
+	
+    /**
+     * Checks if the program will throw InvalidArgumentException
+     * when provided with empty string inputs
+     * @throws InvalidArgumentsException 
+     */
+    @Test(expected = InvalidArgumentsException.class)
+    public void test_Invalid_Path_Invalid_Dec_Main() throws InvalidArgumentsException {
+    	String[] args = {"", ""};
+    	Main.main(args);
+    }
+    
+    @Test(expected = InvalidArgumentsException.class)
+    public void test_Invalid_Path_Valid_Dec_Main() throws InvalidArgumentsException {
+    	String[] args = {"asjn", "String"};
+    	Main.main(args);
+    }
+	
+    @Test(expected = InvalidArgumentsException.class)
+    public void test_Valid_Path_Invalid_Dec_Main() throws InvalidArgumentsException {
+    	String[] args = {BASEDIR, ""};
+    	Main.main(args);
+    }
+    
 	/**
 	 * Tests if the method ParseFilesInDir within MyParser works as
 	 * intended with a valid path and type. No errors. 	
@@ -186,6 +204,12 @@ public class TestDecAndRefCounter {
 		MyParser myParser = new MyParser("aslfjnkfba", "kahdbfka");
 		myParser.ParseFilesInDir();
 	} 
+	
+	@Test (expected = IOException.class)
+	public void test_ParseFilesInDir_Valid_Path_Invalid_File_and_Type() throws IOException {
+		MyParser myParser = new MyParser(new java.io.File( "." ).getCanonicalPath(), "kahdbfka");
+		myParser.ParseFilesInDir();
+	} 
 	 
 	
 	/**
@@ -220,7 +244,7 @@ public class TestDecAndRefCounter {
 	 */
 	@Test
 	public void test_MyParser_Parse_With_ClassDeclaration() {
-		MyParser myParser = new MyParser(BASEDIR, "java.lang.class");
+		MyParser myParser = new MyParser(BASEDIR, "ATestClass");
 		myParser.parse("public class ATestClass { public String mystring;}");
 		assertEquals(1, myParser.getDeclarations());
 	}
@@ -231,7 +255,7 @@ public class TestDecAndRefCounter {
 	 */
 	@Test
 	public void test_MyParser_Parse_Without_ClassDeclaration() {
-		MyParser myParser = new MyParser("", "java.lang.class");
+		MyParser myParser = new MyParser("", "ATest");
 		myParser.parse("ATest{}");
 		assertEquals(0, myParser.getDeclarations());
 	}
@@ -242,7 +266,7 @@ public class TestDecAndRefCounter {
 	 */
 	@Test
 	public void test_MyParser_Parse_Without_InterfaceDeclaration() {
-		MyParser myParser = new MyParser("", "java.lang.interface");
+		MyParser myParser = new MyParser("", "ATestInterface");
 		myParser.parse("public class ATestClass{}");
 		assertEquals(0, myParser.getDeclarations());
 	}
@@ -253,7 +277,7 @@ public class TestDecAndRefCounter {
 	 */
 	@Test
 	public void test_MyParser_Parse_With_InterfaceDeclaration() {
-		MyParser myParser = new MyParser("", "java.lang.interface");
+		MyParser myParser = new MyParser("", "ATestInterface");
 		myParser.parse("public interface ATestInterface{}");
 		assertEquals(1, myParser.getDeclarations());
 	}
@@ -264,7 +288,7 @@ public class TestDecAndRefCounter {
 	 */
 	@Test
 	public void test_MyParser_Parse_Without_EnumDeclaration() {
-		MyParser myParser = new MyParser("", "java.lang.enum");
+		MyParser myParser = new MyParser("", "ATestEnum");
 		myParser.parse("public class ATestClass{}");
 		assertEquals(0, myParser.getDeclarations());
 	}
@@ -275,9 +299,16 @@ public class TestDecAndRefCounter {
 	 */
 	@Test
 	public void test_MyParser_Parse_With_EnumDeclaration() {
-		MyParser myParser = new MyParser("", "java.lang.enum");
+		MyParser myParser = new MyParser("", "ATestEnum");
 		myParser.parse("public enum ATestEnum{A,B}");
 		assertEquals(1, myParser.getDeclarations());
+	}
+	
+	@Test
+	public void test_MyParser_Parse_With_EnumReference() {
+		MyParser myParser = new MyParser("", "ATestEnum");
+		myParser.parse("class A{ enum ATestEnum{A,B} ATestEnum myEnum = ATestEnum.A;}");
+		assertEquals(1, myParser.getReferences());
 	}
 	
 	/**
@@ -286,8 +317,8 @@ public class TestDecAndRefCounter {
 	 */
 	@Test
 	public void test_MyParser_Parse_Without_AnnotationReference() {
-		MyParser myParser = new MyParser("", "java.lang.annotation");
-		myParser.parse("public class ATestClass{}");
+		MyParser myParser = new MyParser("", "ATestAnnot");
+		myParser.parse("public class ATestClass{@}");
 		assertEquals(0, myParser.getDeclarations());
 	}
 	
@@ -297,7 +328,7 @@ public class TestDecAndRefCounter {
 	 */
 	@Test
 	public void test_MyParser_Parse_With_AnnotationReference() {
-		MyParser myParser = new MyParser("", "java.lang.annotation");
+		MyParser myParser = new MyParser("", "Override");
 		myParser.parse("public class ATestClass{@Override public void myfunc() {}}");
 		assertEquals(1, myParser.getReferences());
 	}
@@ -308,8 +339,15 @@ public class TestDecAndRefCounter {
 	 */
 	@Test
 	public void test_MyParser_Parse_With_Normal_AnnotationReference() {
-		MyParser myParser = new MyParser("", "java.lang.annotation");
+		MyParser myParser = new MyParser("", "Test");
 		myParser.parse("public class ATestClass{@Test (expected = IOException.class) public void myfunc() {}}");
+		assertEquals(1, myParser.getReferences());
+	}
+	
+	@Test
+	public void test_MyParser_Parse_With_AnnotationDeclaration() {
+		MyParser myParser = new MyParser("", "IA");
+		myParser.parse("@interface IA { String myStr();}");
 		assertEquals(1, myParser.getReferences());
 	}
 	
@@ -323,7 +361,7 @@ public class TestDecAndRefCounter {
 		parser.setSource("public class MyClass{}".toCharArray());
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		ASTNode node =  parser.createAST(null);	
-		VisitClassDec a = new VisitClassDec();								
+		VisitDeclarations a = new VisitDeclarations("MyClass");								
 		node.accept(a);														
 		assertEquals(1, a.getNum());
 	} 
@@ -338,10 +376,282 @@ public class TestDecAndRefCounter {
 		parser.setSource(" ".toCharArray());
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		ASTNode node =  parser.createAST(null);	
-		VisitClassDec a = new VisitClassDec();								
+		VisitDeclarations a = new VisitDeclarations("MyClass");								
 		node.accept(a);														
 		assertEquals(0, a.getNum());
 	} 
+	
+	@Test
+	public void test_VisitInterfaceDec_With_A_Declaration() {
+		ASTParser parser = ASTParser.newParser(AST.JLS9);					
+		parser.setSource("interface MyInterface {} ".toCharArray());
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		ASTNode node =  parser.createAST(null);	
+		VisitDeclarations a = new VisitDeclarations("MyInterface");								
+		node.accept(a);														
+		assertEquals(1, a.getNum());
+	} 
+	
+	@Test
+	public void test_VisitInterfaceDec_Without_A_Declaration() {
+		ASTParser parser = ASTParser.newParser(AST.JLS9);					
+		parser.setSource("M{} ".toCharArray());
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		ASTNode node =  parser.createAST(null);	
+		VisitDeclarations a = new VisitDeclarations("MyInterface ");								
+		node.accept(a);														
+		assertEquals(0, a.getNum());
+	} 
+	
+	@Test
+	public void test_VisitInterfaceRef_With_A_Reference() {
+		ASTParser parser = ASTParser.newParser(AST.JLS9);					
+		parser.setSource("public class M implements MyInterface {} ".toCharArray());
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		ASTNode node =  parser.createAST(null);	
+		VisitReferences a = new VisitReferences("MyInterface");								
+		node.accept(a);														
+		assertEquals(1, a.getNum());
+	} 
+	
+	@Test
+	public void test_VisitInterfaceRef_Without_A_Reference() {
+		ASTParser parser = ASTParser.newParser(AST.JLS9);					
+		parser.setSource("public class M implements M {} ".toCharArray());
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		ASTNode node =  parser.createAST(null);	
+		VisitReferences a = new VisitReferences("MyInterface");								
+		node.accept(a);														
+		assertEquals(0, a.getNum());
+	} 
+	
+	@Test
+	public void test_VisitAnnotationDec_With_A_Declaration() {
+		ASTParser parser = ASTParser.newParser(AST.JLS9);					
+		parser.setSource(("@interface Preamble {\n" + 
+				"   String author();\n" ).toCharArray());
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		ASTNode node =  parser.createAST(null);	
+		VisitDeclarations a = new VisitDeclarations("Preamble");	
+		if (node.getNodeType() == ASTNode.ANNOTATION_TYPE_DECLARATION)
+			System.out.println("Annot type dec pass");
+		node.accept(a);				
+		assertEquals(1, a.getNum());
+	} 
+	
+	@Test
+	public void test_VisitAnnotationDec_Without_A_Declaration() {
+		ASTParser parser = ASTParser.newParser(AST.JLS9);					
+		parser.setSource("@interface M {}".toCharArray());
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		ASTNode node =  parser.createAST(null);	
+		VisitDeclarations a = new VisitDeclarations("MyAnnot");								
+		node.accept(a);														
+		assertEquals(0, a.getNum());
+	} 
+	
+	@Test
+	public void test_VisitMarkerAnnotationRef_With_A_Reference() {
+		ASTParser parser = ASTParser.newParser(AST.JLS9);					
+		parser.setSource("class C { @Test \n public method myMethod(); }".toCharArray());
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		ASTNode node =  parser.createAST(null);	
+		VisitReferences a = new VisitReferences("Test");								
+		node.accept(a);														
+		assertEquals(1, a.getNum());
+	} 
+	
+	@Test
+	public void test_VisitMarkerAnnotationRef_Without_A_Reference() {
+		ASTParser parser = ASTParser.newParser(AST.JLS9);					
+		parser.setSource("public method myMethod(); ".toCharArray());
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		ASTNode node =  parser.createAST(null);	
+		VisitReferences a = new VisitReferences("Test");								
+		node.accept(a);														
+		assertEquals(0, a.getNum());
+	} 
+	
+	@Test
+	public void test_VisitNormalAnnotationRef_With_A_Reference() {
+		ASTParser parser = ASTParser.newParser(AST.JLS9);					
+		parser.setSource("class C {@Test (expected = IOException.class) \n public method myMethod(); } ".toCharArray());
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		ASTNode node =  parser.createAST(null);	
+		VisitReferences a = new VisitReferences("Test");								
+		node.accept(a);														
+		assertEquals(1, a.getNum());
+	} 
+	
+	@Test
+	public void test_VisitNormalAnnotationRef_Without_A_Reference() {
+		ASTParser parser = ASTParser.newParser(AST.JLS9);					
+		parser.setSource("@Testy (expected = TastyException.class) \n public method myMethod(); ".toCharArray());
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		ASTNode node =  parser.createAST(null);	
+		VisitReferences a = new VisitReferences("Test");								
+		node.accept(a);														
+		assertEquals(0, a.getNum());
+	} 
+	
+	@Test
+	public void test_VisitEnumDec_With_A_Declaration() {
+		ASTParser parser = ASTParser.newParser(AST.JLS9);					
+		parser.setSource("public enum MyEnum implements MyType { enum EnumConst {A,B,C} \n public void myMethod() {} }".toCharArray());
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		ASTNode node =  parser.createAST(null);	
+		VisitDeclarations a = new VisitDeclarations("MyEnum");	
+		if (node.getNodeType() == ASTNode.ENUM_DECLARATION)
+			System.out.println("enum dec pass");
+		node.accept(a);														
+		assertEquals(1, a.getNum());
+	} 
+	
+	@Test
+	public void test_VisitEnumDec_Without_A_Declaration() {
+		ASTParser parser = ASTParser.newParser(AST.JLS9);					
+		parser.setSource("public class MyC implements MyType { enum EnumConst {A,B,C} \n public void myMethod() {} }".toCharArray());
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		ASTNode node =  parser.createAST(null);	
+		VisitDeclarations a = new VisitDeclarations("MyEnum");								
+		node.accept(a);														
+		assertEquals(0, a.getNum());
+	} 
+	
+	@Test
+	public void test_VisitEnumConstantDec_With_A_Declaration() {
+		ASTParser parser = ASTParser.newParser(AST.JLS9);					
+		parser.setSource("public class MyC { enum EnumConst {A,B,C} \n public void myMethod() {}; }".toCharArray());
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		ASTNode node =  parser.createAST(null);	
+		VisitDeclarations a = new VisitDeclarations("EnumConst");	
+		if (node.getNodeType() == ASTNode.ENUM_CONSTANT_DECLARATION)
+			System.out.println("enum const dec pass");
+		node.accept(a);														
+		assertEquals(1, a.getNum());
+	} 
+	
+	@Test
+	public void test_VisitEnumConstantDec_Without_A_Declaration() {
+		ASTParser parser = ASTParser.newParser(AST.JLS9);					
+		parser.setSource("public class MyC implements MyType { enum E {} \n public void myMethod() {} }".toCharArray());
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		ASTNode node =  parser.createAST(null);	
+		VisitDeclarations a = new VisitDeclarations("EnumConst");								
+		node.accept(a);														
+		assertEquals(0, a.getNum());
+	} 
+	
+	@Test
+	public void test_VisitTypeVariableRef_With_A_Reference() {
+		ASTParser parser = ASTParser.newParser(AST.JLS9);					
+		parser.setSource("public class MyC { Const c = Const.var; }".toCharArray());
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		ASTNode node =  parser.createAST(null);	
+		VisitReferences a = new VisitReferences("Const");								
+		node.accept(a);														
+		assertEquals(1, a.getNum());
+	} 
+	
+	@Test
+	public void test_VisitTypeVariableRef_Without_A_Reference() {
+		ASTParser parser = ASTParser.newParser(AST.JLS9);					
+		parser.setSource("public class MyC { }".toCharArray());
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		ASTNode node =  parser.createAST(null);	
+		VisitReferences a = new VisitReferences("Const");								
+		node.accept(a);														
+		assertEquals(0, a.getNum());
+	} 
+	
+	@Test
+	public void test_VisitTypeLiteralRef_With_A_Reference() {
+		ASTParser parser = ASTParser.newParser(AST.JLS9);					
+		parser.setSource("public class C { Const c = Const.class; }".toCharArray());
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		ASTNode node =  parser.createAST(null);	
+		VisitReferences a = new VisitReferences("Const");								
+		node.accept(a);														
+		assertEquals(2, a.getNum());
+	} 
+	
+	@Test
+	public void test_VisitTypeLiteralRef_Without_A_Reference() {
+		ASTParser parser = ASTParser.newParser(AST.JLS9);					
+		parser.setSource("public class C { MyC c = MyC.class; }".toCharArray());
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		ASTNode node =  parser.createAST(null);	
+		VisitReferences a = new VisitReferences("Cls");								
+		node.accept(a);														
+		assertEquals(0, a.getNum());
+	} 
+	
+	@Test
+	public void test_VisitTypeExtensionRef_With_A_Reference() {
+		ASTParser parser = ASTParser.newParser(AST.JLS9);					
+		parser.setSource("public class MyC extends C { }".toCharArray());
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		ASTNode node =  parser.createAST(null);	
+		VisitReferences a = new VisitReferences("C");								
+		node.accept(a);														
+		assertEquals(1, a.getNum());
+	} 
+	
+	@Test
+	public void test_VisitTypeParameterRef2_With_A_Reference() {
+		ASTParser parser = ASTParser.newParser(AST.JLS9);					
+		parser.setSource("class MyC { public <U extends V> myMethod() {} }".toCharArray());
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		ASTNode node =  parser.createAST(null);	
+		VisitReferences a = new VisitReferences("U");								
+		node.accept(a);														
+		assertEquals(1, a.getNum());
+	} 
+	
+	@Test
+	public void test_VisitTypeParameterRef2_Without_A_Reference() {
+		ASTParser parser = ASTParser.newParser(AST.JLS9);					
+		parser.setSource("class MyC { public <U extends V> myMethod() {} }".toCharArray());
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		ASTNode node =  parser.createAST(null);	
+		VisitReferences a = new VisitReferences("X");								
+		node.accept(a);														
+		assertEquals(0, a.getNum());
+	} 
+	
+	@Test
+	public void test_VisitTypeExtensionRef_Without_A_Reference() {
+		ASTParser parser = ASTParser.newParser(AST.JLS9);					
+		parser.setSource("public class MyC extends C { }".toCharArray());
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		ASTNode node =  parser.createAST(null);	
+		VisitReferences a = new VisitReferences("Clash");								
+		node.accept(a);														
+		assertEquals(0, a.getNum());
+	} 
+	
+	@Test
+	public void test_VisitEnumRef_With_A_Reference() {
+		ASTParser parser = ASTParser.newParser(AST.JLS9);					
+		parser.setSource("public class MyC { enum MyE{A} MyE e = MyE.A;}".toCharArray());
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		ASTNode node =  parser.createAST(null);	
+		VisitReferences a = new VisitReferences("MyE");								
+		node.accept(a);														
+		assertEquals(1, a.getNum());
+	}
+	
+	@Test
+	public void test_VisitEnumRef_Without_A_Reference() {
+		ASTParser parser = ASTParser.newParser(AST.JLS9);					
+		parser.setSource("public class MyC { enum MyE{A} enum Ex {X} MyE e = MyE.A;}".toCharArray());
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		ASTNode node =  parser.createAST(null);	
+		VisitReferences a = new VisitReferences("Ex");								
+		node.accept(a);														
+		assertEquals(0, a.getNum());
+	}
+
 	
 	/**
 	 * This test attempts to use the getTypeName method in main to see if it returns

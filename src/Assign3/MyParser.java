@@ -138,8 +138,6 @@ public class MyParser {
 		 for (File f : files ) {										// Loop through each file
 			 filePath = f.getAbsolutePath();
 			 if(f.isFile()){
-				 					// switch case here?
-				 System.out.println(filePath);
 				 parse(readFileToString(filePath));						//Parse with the string of the file read
 			 } else
 				 throw new IOException();
