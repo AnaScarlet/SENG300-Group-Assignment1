@@ -66,8 +66,8 @@ public class Main {
 			typeDec = reader.next();
 			reader.close();	
 		}
-		if (typeDec.equals("") || !(new File(path).isDirectory()))	{										//If type is an empty string throw
-			throw new InvalidArgumentsException();						//an exception and exit the program.
+		if (typeDec.equals("") || !(new File(path).isDirectory()))	{		//If type is an empty string throw
+			throw new InvalidArgumentsException();							//an exception and exit the program.
 		}
 		MyParser parser = new MyParser(path, getTypeName(typeDec));			//Create a new parser instance with
 		try {																//the given arguments.
@@ -78,8 +78,7 @@ public class Main {
 
 		System.out.println(typeDec + ". Declarations found: " + parser.getDeclarations() + 
 			"; References found: " + parser.getReferences() + ".");			//Get and print the number of references and
-		//parser.getDeclarations() + parser.getReferences();			//declarations in directory and return the sum
-	}																		//of both.
+	}																		//declarations in directory.
 
 	
 	/**

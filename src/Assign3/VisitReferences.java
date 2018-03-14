@@ -38,8 +38,8 @@ public class VisitReferences extends ASTVisitor  {
 	 */
 	public boolean visit(SimpleType node) {
 		if(node.getName().toString().equals(QualName)) {
-			num ++;	
-			return true;
+			num ++;												//Type found and increment the total.
+			return true;										//Check children of this node.
 		}
 		return true;
 	}
@@ -70,10 +70,10 @@ public class VisitReferences extends ASTVisitor  {
 	 */
 	public boolean visit(NormalAnnotation node) {
 		if(node.getTypeName().toString().equals(QualName)) {
-			num ++;						// increment total
-			return true;
+			num ++;												//Type found and increment the total
+			return true;										//don't skip children of this node
 		}	
-		return true;				 // don't skip children of this node
+		return true;	
 	}
 
 	

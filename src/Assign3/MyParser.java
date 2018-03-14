@@ -38,7 +38,7 @@ public class MyParser {
 
 
 	public MyParser(String path, String typeDec) {
-		this.typeDec = typeDec;									//Constructor used to take the directory path and type.
+		this.typeDec = typeDec;									//Constructor used to take the directory path and type
 		this.dirPath = path;									//and the language type.
 	}
 
@@ -134,7 +134,7 @@ public class MyParser {
 		 for (File f : files ) {								// Loop through each file
 			 filePath = f.getAbsolutePath();
 			 if(f.isFile()){
-				 parse(readFileToString(filePath));						//Parse with the string of the file read
+				 parse(readFileToString(filePath));				//Parse with the string of the file read
 			 } else
 				 throw new IOException();
 		 }

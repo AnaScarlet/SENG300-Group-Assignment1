@@ -38,9 +38,9 @@ public class VisitDeclarations extends ASTVisitor {
 	 * @return			True, to check the children.
 	 */
 	public boolean visit(TypeDeclaration node) {
-		if(node.getName().toString().equals(QualName)){  
+		if(node.getName().toString().equals(QualName)){  		//Type found and increment the total.
 			num ++;								
-			return true;
+			return true;										//Check children of this node.
 		}
 		return true; 	
 	}
@@ -55,7 +55,7 @@ public class VisitDeclarations extends ASTVisitor {
 	public boolean visit(AnnotationTypeDeclaration node) {
 		if(node.getName().toString().equals(QualName)){  		//Type found and increment the total.
 			num ++;										
-			return true;										//Check children of this node
+			return true;										//Check children of this node.
 		}
 		return true;
 	}
@@ -70,17 +70,24 @@ public class VisitDeclarations extends ASTVisitor {
 	public boolean visit(EnumConstantDeclaration node) {
 		System.out.println("have an EnumConstantDeclaration: " + node.getName());
 		if(node.getName().toString().equals(QualName)){ 	
-			num ++;													// increment the total.
-			return true;  // go to children of this node
+			num ++;												//Type found and increment the total.
+			return true; 										//Check children of this node
 		}
 		return true;
 	}
 	
+	/**
+	 * This function searches through he AST given and counts the total number of declarations found
+	 * of type EnumDeclaration.
+	 * 
+	 * @param node		The AST to search though.
+	 * @return			True, to check the children.
+	 */
 	public boolean visit(EnumDeclaration node) {
 		System.out.println("have an EnumDeclaration: " + node.getName());
 		if(node.getName().toString().equals(QualName)){ 	
-			num ++;													//increment the total.
-			return true;  // go to children of this node
+			num ++;												//Type found and increment the total.
+			return true; 										//check children of this node
 		}
 		return true;
 	}
