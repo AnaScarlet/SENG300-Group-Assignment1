@@ -12,7 +12,6 @@
  * java language type and saves the number or declarations and references they found.
  */
 
-
 package src.Assign3;
 
 import java.io.BufferedReader;
@@ -32,14 +31,14 @@ import org.eclipse.jdt.internal.compiler.ASTVisitor;
 public class MyParser {
 
 
-	private String typeDec = "init";
-	public String dirPath = "init";
+	private String typeDec = "init";							//Type declared by user.
+	public String dirPath = "init";								//Directory declared by user.
 	private int	declarations = 0;
 	private int	references = 0;
 
 
 	public MyParser(String path, String typeDec) {
-		this.typeDec = typeDec;					//Constructor used to take the directory path
+		this.typeDec = typeDec;									//Constructor used to take the directory path and type.
 		this.dirPath = path;									//and the language type.
 	}
 
@@ -66,54 +65,52 @@ public class MyParser {
 
 
 	/**
-	 * Creates an AST using the given string and determines which type was given.
-	 * It then calls the methods which searches and counts the number of declarations and
-	 * references of that type within the AST.
+	 * Creates an AST using the given string and calls the declarations and
+	 * references methods to find and count the number of declarations and
+	 * references.
 	 * 
 	 * @param filePath		A given string to convert into an AST.
 	 */
 	public void parse(String filePath) {
 
-		ASTParser parser = ASTParser.newParser(AST.JLS8);					//Creating the AST with the given string.
+		ASTParser parser = ASTParser.newParser(AST.JLS8);		//Creating the AST with the given string.
 		parser.setSource(filePath.toCharArray());
 		parser.setResolveBindings(true);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setBindingsRecovery(false);
 		
-		final ASTNode node =  parser.createAST(null);						//AST node to be used to search through.
+		final ASTNode node =  parser.createAST(null);			//AST node to be used to search through.
 	    
-		allDeclarations(node);
-		allReferences(node);
+		allDeclarations(node);									//Methods called to find the declarations
+		allReferences(node);									//and references.
 				
 	}
 	
 	/**
-	 * This method is called to use VisitReferences to search for class 
+	 * This method is called to use VisitReferences to search for all 
 	 * type references and change the number found in this class 
 	 * to the number found in a.
 	 * 
 	 * @param node		The final AST created to be searched.
 	 */
-	
 	public void allReferences(ASTNode node){
-		VisitReferences a = new VisitReferences(typeDec);				//Create an instance of this class and use it
-		node.accept(a);														//to search for references of classes. 
-		references = a.getNum() + references;										//Set the number of references found.
+		VisitReferences a = new VisitReferences(typeDec);		//Create an instance of this class and use it
+		node.accept(a);											//to search for references of classes. 
+		references = a.getNum() + references;					//Set the number of references found.
 	}
 
 		
 	/**
-	 * This method is called to use VisitDeclarations to search for class 
+	 * This method is called to use VisitDeclarations to search for all 
 	 * type declarations and change the number found in this class 
 	 * to the number found in a.
 	 * 
 	 * @param node		The final AST created to be searched.
 	 */
-	
 	public void allDeclarations(ASTNode node){
-		VisitDeclarations a = new VisitDeclarations(typeDec);								//Create an instance of this class and use it
-		node.accept(a);														//To search for declarations of classes.
-		declarations = a.getNum() + declarations;											//Set the number of declarations found.
+		VisitDeclarations a = new VisitDeclarations(typeDec);	//Create an instance of this class and use it
+		node.accept(a);											//To search for declarations of classes.
+		declarations = a.getNum() + declarations;				//Set the number of declarations found.
 
 	}
 
@@ -126,16 +123,15 @@ public class MyParser {
 	 * 
 	 * @throws IOException
 	 */
-
 	public void ParseFilesInDir() throws IOException{
 		
-		File root = new File(dirPath);									// Takes the string path, converts that to an abstract pathname
+		File root = new File(dirPath);							// Takes the string path, converts that to an abstract pathname
 		if (!root.isDirectory())
 			throw new IOException();
-		File[] files = root.listFiles( );								// then breaks that pathname into each file.
+		File[] files = root.listFiles( );						// then breaks that pathname into each file.
 		String filePath = "";
 		
-		 for (File f : files ) {										// Loop through each file
+		 for (File f : files ) {								// Loop through each file
 			 filePath = f.getAbsolutePath();
 			 if(f.isFile()){
 				 parse(readFileToString(filePath));						//Parse with the string of the file read
@@ -152,21 +148,20 @@ public class MyParser {
 	 * @return 				The string format of the file.
 	 * @throws IOException	
 	 */
-	
 	public String readFileToString(String filePath) throws IOException {
 
-		StringBuilder fileData = new StringBuilder();							//Opening the file to read it
+		StringBuilder fileData = new StringBuilder();			//Opening the file to read it
 		BufferedReader reader = new BufferedReader(new FileReader(filePath));
 
 		char[] buf = new char[10];
 		int numRead = 0;
-		while ((numRead = reader.read(buf)) != -1) {							//Loop through the file appending 
-			String readData = String.valueOf(buf, 0, numRead);					//the lines read to a total
+		while ((numRead = reader.read(buf)) != -1) {			//Loop through the file appending 
+			String readData = String.valueOf(buf, 0, numRead);	//the lines read to a total
 			fileData.append(readData);
 			buf = new char[1024];
 		}
 
-		reader.close();															//Closing the file
-		return  fileData.toString();											//returning what was read as a string
+		reader.close();											//Closing the file
+		return  fileData.toString();							//returning what was read as a string
 	}
 }
