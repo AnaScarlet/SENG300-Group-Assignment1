@@ -37,11 +37,9 @@ public class VisitReferences extends ASTVisitor  {
 	 * @return			True, to check the children.
 	 */
 	public boolean visit(SimpleType node) {
-		System.out.println(node.getName());
 		if(node.getName().toString().equals(QualName)) {
-			System.out.println(QualName);
-			num ++;												//Type found and increment the total.
-			return true; 										//Check children of this node
+			num ++;	
+			return true;
 		}
 		return true;
 	}
@@ -71,29 +69,13 @@ public class VisitReferences extends ASTVisitor  {
 	 * @return			True, to check the children.
 	 */
 	public boolean visit(NormalAnnotation node) {
-		if(node.getTypeName().toString().equals(QualName)) {		
-			num ++;												//Type found and increment the total.
-			return true;				 						//Check children of this node.
-		}
-		return true;
+		if(node.getTypeName().toString().equals(QualName)) {
+			num ++;						// increment total
+			return true;
+		}	
+		return true;				 // don't skip children of this node
 	}
 
-
-	/**
-	 * This function searches through he AST given and counts the total number of references found
-	 * of AbstractTypeDeclaration type.
-	 * 
-	 * @param node		The AST to search though.
-	 * @return			True, to check the children.
-	 */															
-	public boolean visit(AbstractTypeDeclaration node) {					//This method might mess up alongside Marker
-		if((node.getName().getFullyQualifiedName()).equals(QualName)){		//Annotations because bindings don't seem to work.
-			num ++;												//Type found and increment the total.
-			return true;										//Check children of this node
-		}
-		return true;
-	}
-	
 	
 	/**
 	 * This function searches through he AST given and counts the total number of references found
