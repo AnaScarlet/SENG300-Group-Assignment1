@@ -11,7 +11,7 @@
  * 2. takes a string to indicate a fully qualified name of a Java type,
  * 3. counts the number of declarations of that type within that directory (non-recursively!), and
  * 4. counts the number of references to each occurrence of that type within that directory (non-recursively!).
- *  Referenced code //https://www.programcreek.com/2011/11/use-jdt-astparser-to-parse-java-file/
+ * Referenced code //https://www.programcreek.com/2011/11/use-jdt-astparser-to-parse-java-file/
  * aa
  */
 
@@ -35,12 +35,7 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
 
 public class Main {
-
-	/* TODO: Looking for references to classes
-		String s = (String) new Integer(); - CastExpression, ClassInstanceCreation
-		String.CASE_INSENSITIVE_ORDER;
-		String.class - TypeLiteral
-	 */
+	
 	
 	/**
 	 * This is the main method which takes in two command line arguments (A java language type to 
@@ -88,11 +83,11 @@ public class Main {
 
 	
 	/**
-	 * takes a full java type name and chops off everything but the type name 
-	 * eg: java.lang.String to String
+	 * Takes a full java type name and chops off everything but the type name.
+	 * Eg: java.lang.String to String
 	 * 
-	 * @param fullTypeName	The qualified name.
-	 * @return typeName		The simple name.
+	 * @param fullTypeName	The qualified name given.
+	 * @return typeName		The simple name made.
 	 */
 	public static String getTypeName(String fullTypeName) {
 		int len = fullTypeName.length();									//Get the length of the qualified name.

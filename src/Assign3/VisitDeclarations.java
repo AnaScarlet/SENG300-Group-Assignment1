@@ -7,7 +7,7 @@
  * Course:              SENG300, University of Calgary
  * Instructor:          Prof. Robert Walker
  * 
- * This class uses the ASTVisitor to search for nodes of java language type TypeDeclaration (class)
+ * This class uses the ASTVisitor to search for nodes of java language types
  * and counts the total number of declarations found.
  */
 
@@ -20,50 +20,60 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 public class VisitDeclarations extends ASTVisitor {
 	
-	String QualName = "";
+	String QualName = "";										//Qualified name
 	
 	public VisitDeclarations(String QualName) {
 		this.QualName = QualName;
 	}
 	
-	private int num = 0;											//Total number of declarations found.
+	private int num = 0;										//Total number of declarations found.
 	
 	
 	/**
 	 * This function searches through he AST given and counts the total number of declarations found
-	 * of type class.
+	 * of type TypeDeclaration.
 	 * 
 	 * @param node		The AST to search though.
-	 * @return			False, to skip the nodes children.
+	 * @return			True, to check the children.
 	 */
-	
 	public boolean visit(TypeDeclaration node) {
-			
-		if(node.getName().toString().equals(QualName)){  
-			num ++;								
-			return true;
+		if(node.getName().toString().equals(QualName)){  		//Type found and increment the total.
+			num ++;										
+			return true;										//Check children of this node
 		}
-		return true; 			// goto children of this node
+		return true; 	
 	}
-	
 
 	
-	
+	/**
+	 * This function searches through he AST given and counts the total number of declarations found
+	 * of type AnnotationTypeDeclaration.
+	 * 
+	 * @param node		The AST to search though.
+	 * @return			True, to check the children.
+	 */
 	public boolean visit(AnnotationTypeDeclaration node) {
-		if(node.getName().toString().equals(QualName)){  
-			num ++;															//this message and increment the total.
-			return true;
+		if(node.getName().toString().equals(QualName)){  		//Type found and increment the total.
+			num ++;										
+			return true;										//Check children of this node
 		}
-		return true;				 // goto children of this node
+		return true;
 	}
 
+	/**
+	 * This function searches through he AST given and counts the total number of declarations found
+	 * of type EnumerationConstantDeclaration.
+	 * 
+	 * @param node		The AST to search though.
+	 * @return			True, to check the children.
+	 */
 	public boolean visit(EnumConstantDeclaration node) {
-		if(node.getName().toString().equals(QualName)){ 		//When a class node is found print a message
-		num ++;													//and increment the total.
-		return true;  // skip children of this node
+		if(node.getName().toString().equals(QualName)){			//Type found and increment the total.
+		num ++;
+		return true;											//Check children of this node
 		}
 	return true;
-}
+	}
 	
 	
 	/**
@@ -71,7 +81,6 @@ public class VisitDeclarations extends ASTVisitor {
 	 * 
 	 * @return			The total number of declarations found.
 	 */
-	
 	public int getNum() {
 		return num;
 	}	
